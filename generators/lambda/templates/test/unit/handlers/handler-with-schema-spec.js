@@ -7,7 +7,7 @@ _chai.use(require('sinon-chai'));
 _chai.use(require('chai-as-promised'));
 const expect = _chai.expect;
 
-const _loggerProvider = require('wysknd-common').loggerProvider;
+const _loggerProvider = require('wysknd-log').loggerProvider;
 _loggerProvider.enableMock();
 
 const _rewire = require('rewire');

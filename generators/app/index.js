@@ -20,6 +20,35 @@ module.exports = _yeoman.Base.extend({
 
     },
 
+    /**
+     * Creates project files
+     */
+    createProjectFiles: function () {
+        [
+            'package.json',
+            'Gruntfile.js',
+            'README.md',
+            'lambda-config.json',
+            '_gitignore',
+            '_npmignore',
+            '_projections.json',
+            'config/default.json',
+            'config/dev.json',
+            'config/prod.json',
+            'config/custom-environment-variables.json',
+            'src/index.js',
+            'test/unit/index-spec.js'
+        ].forEach((srcFile) => {
+            const destFile = (srcFile.indexOf('_') === 0) ?
+                                        srcFile.replace('_', '.'): srcFile;
+            this.fs.copyTpl(
+                this.templatePath(srcFile),
+                this.destinationPath(destFile),
+                this.props
+            );
+        });
+    },
+
    /**
     * Check if the user would like to create a sample lambda function
     */
@@ -37,28 +66,6 @@ module.exports = _yeoman.Base.extend({
                 this.composeWith('wysknd-lambda:lambda');
             }
         });
-    },
-
-    /**
-     * Copies core project files
-     */
-    copyFiles: function () {
-        this.fs.copyTpl(
-            this.templatePath('package.json'),
-            this.destinationPath('package.json'),
-            this.props
-        );
-        this.fs.copyTpl(
-            this.templatePath('Gruntfile.js'),
-            this.destinationPath('Gruntfile.js'),
-            this.props
-        );
-        this.fs.writeJSON(
-            this.destinationPath('resources/lambda-config.json'),
-            { lambdas: [ ] },
-            null,
-            4
-        );
     },
 
    //  install: function () {

@@ -4,12 +4,12 @@
 const _fs = require('fs');
 const _folder = require('wysknd-lib').folder;
 const _utils = require('wysknd-lib').utils;
-const _lambdaConfig = require('./resources/lambda-config.json');
+const _lambdaConfig = require('./lambda-config.json');
 const _awsSdk = require('aws-sdk');
 
 // Need to set project specific options here.
 const AWS_PROFILE = '<%= awsProfile %>';
-const AWS_REGION = '<%= awsRegion %>;
+const AWS_REGION = '<%= awsRegion %>';
 
 // -------------------------------------------------------------------------------
 //  Help documentation
@@ -287,7 +287,7 @@ module.exports = function(grunt) {
          */
         generate_cf_template: {
             options: {
-                description: 'AWS resources for the thermal camera web portal',
+                description: 'AWS resources for project: <%= projectName %>',
                 tokens: {
                     lambda_execute_role: `$REGION.${ENV.appName}.lambda_role`
                 },

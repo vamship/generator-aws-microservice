@@ -75,13 +75,14 @@ module.exports = _yeoman.Base.extend({
      */
      createLambdaDefinition: function() {
         const lambdaConfig = this.fs.readJSON(
-            this.destinationPath('resources/lambda-config.json'), {
+            this.destinationPath('lambda-config.json'), {
                 lambdas: []
             }
         );
         const lambdaDefinition = {
             functionName: this.props.lambdaFunctionName,
-            handlerName: this.props.lambdaHandlerName
+            handlerName: this.props.lambdaHandlerName,
+            fileName: this.props.lambdaHandlerFile
         };
 
         if(this.props.lambdaDescription) {
@@ -106,7 +107,7 @@ module.exports = _yeoman.Base.extend({
 
         lambdaConfig.lambdas.push(lambdaDefinition);
         this.fs.writeJSON(
-            this.destinationPath('resources/lambda-config.json'),
+            this.destinationPath('lambda-config.json'),
             lambdaConfig,
             null,
             4
