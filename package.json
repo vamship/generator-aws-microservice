@@ -1,0 +1,53 @@
+{
+  "name": "generator-wysknd-lambda",
+  "version": "0.0.0",
+  "description": "Generates a sample project for a collection of AWS lambda functions along with optional cloud formation templates for resource generation",
+  "homepage": "",
+  "author": {
+    "name": "Vamshi K Ponnapalli",
+    "email": "vamshi.ponnapalli@gmail.com",
+    "url": ""
+  },
+  "files": [
+    "generators"
+  ],
+  "main": "generators/index.js",
+  "keywords": [
+    "aws",
+    "lambda",
+    "cloud formation",
+    "yeoman-generator"
+  ],
+  "dependencies": {
+    "camelcase": "^4.0.0",
+    "chalk": "^1.0.0",
+    "yeoman-generator": "^0.23.0",
+    "yosay": "^1.0.0"
+  },
+  "devDependencies": {
+    "yeoman-test": "^1.0.0",
+    "yeoman-assert": "^2.0.0",
+    "eslint": "^3.1.1",
+    "eslint-config-xo-space": "^0.15.0",
+    "gulp": "^3.9.0",
+    "gulp-eslint": "^3.0.1",
+    "gulp-exclude-gitignore": "^1.0.0",
+    "gulp-line-ending-corrector": "^1.0.1",
+    "gulp-istanbul": "^1.0.0",
+    "gulp-mocha": "^3.0.1",
+    "gulp-plumber": "^1.0.0",
+    "gulp-nsp": "^2.1.0"
+  },
+  "eslintConfig": {
+    "extends": "xo-space",
+    "env": {
+      "mocha": true
+    }
+  },
+  "repository": "vamship/generator-wysknd-lambda",
+  "scripts": {
+    "prepublish": "gulp prepublish",
+    "test": "gulp"
+  },
+  "license": "MIT"
+}
