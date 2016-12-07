@@ -61,9 +61,9 @@ module.exports = _yeoman.Base.extend({
                     this.props = Object.assign(this.props || {}, props);
 
                     const handlerFile = stripPrefix(this.props.lambdaFunctionName)
-                                            .replace('_', '-');
+                        .replace(/_/g, '-');
 
-                    this.props.lambdaHandlerFile = `${handlerFile}`;
+                    this.props.lambdaHandlerFile = `${handlerFile}-handler`;
                     this.props.lambdaSchemaFile = `${handlerFile}-schema`;
                     this.props.lambdaSpecFile = `${handlerFile}-spec`;
                 });
@@ -119,33 +119,12 @@ module.exports = _yeoman.Base.extend({
      * schema definition.
      */
      createLambdaFunctionWithSchema() {
-         if(!this.props.lambdaHasSchema) {
-             return;
-         }
-         this.fs.copyTpl(
-             this.templatePath(`src/schema/handler-schema.json`),
-             this.destinationPath(`src/schema/${this.props.lambdaSchemaFile}.json`),
-             this.props
-         );
-         this.fs.copyTpl(
-             this.templatePath(`src/handlers/handler-with-schema.js`),
-             this.destinationPath(`src/handlers/${this.props.lambdaHandlerFile}.js`),
-             this.props
-         );
-         this.fs.copyTpl(
-             this.templatePath(`test/unit/handlers/handler-with-schema-spec.js`),
-             this.destinationPath(`test/unit/handlers/${this.props.lambdaSpecFile}.js`),
-             this.props
-         );
-     },
-
-    /**
-     * Creates the necessary files for the lambda function, but includes no
-     * schema files.
-     */
-     createLambdaFunctionWithoutSchema() {
          if(this.props.lambdaHasSchema) {
-             return;
+             this.fs.copyTpl(
+                 this.templatePath(`src/schema/handler-schema.json`),
+                 this.destinationPath(`src/schema/${this.props.lambdaSchemaFile}.json`),
+                 this.props
+             );
          }
          this.fs.copyTpl(
              this.templatePath(`src/handlers/handler.js`),
@@ -157,5 +136,25 @@ module.exports = _yeoman.Base.extend({
              this.destinationPath(`test/unit/handlers/${this.props.lambdaSpecFile}.js`),
              this.props
          );
-     }
+     },
+
+    // /**
+    //  * Creates the necessary files for the lambda function, but includes no
+    //  * schema files.
+    //  */
+    //  createLambdaFunctionWithoutSchema() {
+    //      if(this.props.lambdaHasSchema) {
+    //          return;
+    //      }
+    //      this.fs.copyTpl(
+    //          this.templatePath(`src/handlers/handler.js`),
+    //          this.destinationPath(`src/handlers/${this.props.lambdaHandlerFile}.js`),
+    //          this.props
+    //      );
+    //      this.fs.copyTpl(
+    //          this.templatePath(`test/unit/handlers/handler-spec.js`),
+    //          this.destinationPath(`test/unit/handlers/${this.props.lambdaSpecFile}.js`),
+    //          this.props
+    //      );
+    //  }
 });

@@ -19,16 +19,18 @@ const _testUtils = _testHelper.utils;
 let _handler = null;
 
 describe('[<%= lambdaHandlerName %>]', () => {
+    <%if (lambdaHasSchema) {%>
     const DEFAULT_FIRST_NAME = 'John';
     const DEFAULT_LAST_NAME = 'Doe';
     const DEFAULT_MIDDLE_NAME = 'Samuel';
-
+    <%} %>
     function _createWrapper(event, alias, config) {
         event = event || {};
+        <%if (lambdaHasSchema) {%>
         event.user = event.user || {};
         event.user.firstName = event.user.firstName || DEFAULT_FIRST_NAME;
         event.user.lastName = event.user.lastName || DEFAULT_LAST_NAME;
-
+        <%} %>
         const contextInfo = {
             alias: alias
         };
@@ -41,7 +43,7 @@ describe('[<%= lambdaHandlerName %>]', () => {
     beforeEach(() => {
         _handler = _rewire('../../../src/handlers/<%= lambdaHandlerFile %>');
     });
-
+    <%if (lambdaHasSchema) {%>
     describe('[input validation]', () => {
 
         it('should fail execution if the event does not define a valid user object', () => {
@@ -93,7 +95,7 @@ describe('[<%= lambdaHandlerName %>]', () => {
             });
         });
     });
-
+    <%} %>
     describe('[execution]', () => {
         it('should invoke the callback with a success message', () => {
             const wrapper = _createWrapper(undefined, 'dev');

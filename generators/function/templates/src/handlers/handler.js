@@ -1,10 +1,10 @@
 'use strict';
-
+<%if (lambdaHasSchema) { %>
 const _schemaHelper = require('wysknd-args').schemaHelper;
 
 const _schema = require('../schema/<%= lambdaSchemaFile %>');
 const _checkSchema = _schemaHelper.buildSchemaChecker(_schema);
-
+<%} %>
 /**
  * <%= lambdaDescription %>
  * 
@@ -18,6 +18,7 @@ const _checkSchema = _schemaHelper.buildSchemaChecker(_schema);
 module.exports = function(event, context, callback, ext) {
     const logger = ext.logger;
     const config = ext.config;
+    <%if (lambdaHasSchema) {%>
     let error = _checkSchema(event, callback);
 
     if (error) {
@@ -25,7 +26,7 @@ module.exports = function(event, context, callback, ext) {
         callback(error);
         return;
     }
-
+    <%} %>
     //TODO: Implement function and invoke callback.
     callback(null, 'Lambda function [<%= lambdaFunctionName %>] executed successfully');
 };
