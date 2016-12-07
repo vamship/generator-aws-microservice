@@ -49,9 +49,21 @@ module.exports = _yeoman.Base.extend({
         });
     },
 
-   /**
-    * Check if the user would like to create a sample lambda function
-    */
+    /**
+     * Create cloud formation templates for basic resources.
+     */
+    createCloudFormationTemplates: function() {
+        return this.composeWith('wysknd-lambda:cf-role', {
+            options: {
+                projectPrefix: this.props.projectPrefix,
+                roleName: 'lambda_role'
+            }
+        });
+    },
+
+    /**
+     * Check if the user would like to create a sample lambda function
+     */
     checkCreateLambda: function () {
         const prompts = [{
             type: 'confirm',
@@ -63,12 +75,8 @@ module.exports = _yeoman.Base.extend({
         return this.prompt(prompts).then((props) => {
             this.props = Object.assign(this.props || {}, props);
             if(props.createLambdaFunction === true) {
-                this.composeWith('wysknd-lambda:lambda');
+                return this.composeWith('wysknd-lambda:function');
             }
         });
-    },
-
-   //  install: function () {
-   //      //this.installDependencies();
-   //  }
+    }
 });

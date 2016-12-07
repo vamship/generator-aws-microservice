@@ -1,26 +1,33 @@
 'use strict';
 
 const _yeoman = require('yeoman-generator');
-const _chalk = require('chalk');
 const _camelCase = require('camelcase');
+const _decamelize = require('decamelize');
 
 const _prompts = require('../../utils/prompts');
 
 module.exports = _yeoman.Base.extend({
-   /**
-    * Gathers lambda function information.
-    */
-    gatherLambdaInfo: function () {
-        const stripPrefix = (functionName) => {
+    /**
+     * Initializes the generator.
+     */
+    constructor: function() {
+        _yeoman.Base.apply(this, arguments);
+
+        this._stripPrefix = (target) => {
             const prefix = this.props.projectPrefix;
 
-            if(functionName.indexOf(prefix) === 0) {
-                return functionName.replace(`${prefix}-`, '');
+            if(target.indexOf(prefix) === 0) {
+                return target.replace(`${prefix}-`, '');
             } else {
-                return functionName;
+                return target;
             }
         };
+    },
 
+    /**
+     * Gathers lambda function information.
+     */
+    gatherLambdaInfo: function () {
         const prompts = [{
             type: 'input',
             name: 'lambdaFunctionName',
@@ -31,7 +38,7 @@ module.exports = _yeoman.Base.extend({
             name: 'lambdaHandlerName',
             message: 'Lambda handler name?',
             default: (answers) => {
-                const handlerName = stripPrefix(answers.lambdaFunctionName);
+                const handlerName = this._stripPrefix(answers.lambdaFunctionName);
                 return `index.${_camelCase(handlerName)}Handler`
             }
         }, {
@@ -59,15 +66,20 @@ module.exports = _yeoman.Base.extend({
             .then(() => {
                 return this.prompt(prompts).then((props) => {
                     this.props = Object.assign(this.props || {}, props);
-
-                    const handlerFile = stripPrefix(this.props.lambdaFunctionName)
-                        .replace(/_/g, '-');
-
-                    this.props.lambdaHandlerFile = `${handlerFile}-handler`;
-                    this.props.lambdaSchemaFile = `${handlerFile}-schema`;
-                    this.props.lambdaSpecFile = `${handlerFile}-spec`;
                 });
             });
+    },
+
+    /**
+     * Generates target file names.
+     */
+    generateTargetFileNames: function() {
+        let handlerFile = this._stripPrefix(this.props.lambdaFunctionName);
+        handlerFile = _decamelize(handlerFile).replace(/_/g, '-');
+
+        this.props.lambdaHandlerFile = `${handlerFile}-handler`;
+        this.props.lambdaSchemaFile = `${handlerFile}-schema`;
+        this.props.lambdaSpecFile = `${handlerFile}-spec`;
     },
 
     /**
