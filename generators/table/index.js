@@ -221,7 +221,7 @@ module.exports = _yeoman.Base.extend({
     createTableTemplate: function() {
         this.fs.copyTpl(
             this.templatePath(`resources/cf/dynamodb/table.js`),
-            this.destinationPath(`resources/cf/iam/${this.props.tableTemplateFile}.js`),
+            this.destinationPath(`resources/cf/dynamodb/${this.props.tableTemplateFile}.js`),
             this.props
         );
     }
