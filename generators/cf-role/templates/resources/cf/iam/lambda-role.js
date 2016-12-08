@@ -17,25 +17,25 @@ module.exports = (dirInfo) => {
                         .addAction('sts:AssumeRole')
                         .addServicePrincipal('lambda.amazonaws.com'))
                 )
-<% if(rolePolicies.indexOf(' All AWS Services (Be careful with this one ..)') >= 0) { -%>
+<% if(rolePolicies.indexOf('ALL_ACCESS') >= 0) { -%>
                 .addAwsManagedPolicy('AWSLambdaFullAccess');
 <% } -%>
-<% if(rolePolicies.indexOf(' DynamoDb Read Only') >= 0) { -%>
+<% if(rolePolicies.indexOf('DYNAMO_READ_ONLY') >= 0) { -%>
                 .addAwsManagedPolicy('service-role/AWSLambdaDynamoDBExecutionRole');
 <% } -%>
-<% if(rolePolicies.indexOf(' S3 Read Only') >= 0) { -%>
+<% if(rolePolicies.indexOf('S3_READ_WRITE') >= 0) { -%>
                 .addAwsManagedPolicy('AmazonS3ReadOnlyAccess');
 <% } -%>
-<% if(rolePolicies.indexOf(' S3 Read/Write') >= 0) { -%>
+<% if(rolePolicies.indexOf('S3_READ_WRITE') >= 0) { -%>
                 .addAwsManagedPolicy('AmazonS3FullAccess');
 <% } -%>
-<% if(rolePolicies.indexOf(' Lambda Invoke') >= 0) { -%>
+<% if(rolePolicies.indexOf('LAMBDA_INVOKE') >= 0) { -%>
                 .addAwsManagedPolicy('service-role/AWSLambdaRole');
 <% } -%>
-<% if(rolePolicies.indexOf(' Kinesis Read Only') >= 0) { -%>
+<% if(rolePolicies.indexOf('KINESIS_READ_ONLY') >= 0) { -%>
                 .addAwsManagedPolicy('service-role/AWSLambdaKinesisExecutionRole');
 <% } -%>
-<% if(rolePolicies.indexOf(' DynamoDb Read/Write') >= 0) { -%>
+<% if(rolePolicies.indexOf('DYNAMO_READ_WRITE') >= 0) { -%>
                 .addPolicy('dynamoDbReadWritePolicy', 
                     (new PolicyDocument())
                     .addStatement((new PolicyStatement())

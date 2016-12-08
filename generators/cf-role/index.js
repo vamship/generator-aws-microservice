@@ -11,7 +11,6 @@ module.exports = _yeoman.Base.extend({
     gatherRoleInfo: function () {
         this.props = this.props || {};
         this.props.roleName = this.options.roleName;
-        this.props.projectPrefix = this.options.projectPrefix;
         const prompts = [];
         if(!this.props.roleName) {
             prompts.push({
@@ -25,15 +24,28 @@ module.exports = _yeoman.Base.extend({
             type: 'checkbox',
             name: 'rolePolicies',
             message: 'Choose one or more policies that apply to the role',
-            choices: [
-                ' All AWS Services (Be careful with this one ..)',
-                ' DynamoDb Read Only',
-                ' DynamoDb Read/Write',
-                ' S3 Read Only',
-                ' S3 Read/Write',
-                ' Lambda Invoke',
-                ' Kinesis Read Only'
-            ],
+            choices: [ {
+                name: ' All AWS Services (Be careful with this one ..)',
+                value: 'ALL_ACCESS',
+            }, {
+                name: ' DynamoDb Read Only',
+                value: 'DYNAMO_READ_ONLY',
+            }, {
+                name: ' DynamoDb Read/Write',
+                value: 'DYNAMO_READ_WRITE',
+            }, {
+                name: ' S3 Read Only',
+                value: 'S3_READ_ONLY',
+            }, {
+                name: ' S3 Read/Write',
+                value: 'S3_READ_WRITE',
+            }, {
+                name: ' Lambda Invoke',
+                value: 'LAMBDA_INVOKE',
+            }, {
+                name: ' Kinesis Read Only',
+                value: 'KINESIS_READ_ONLY'
+            }],
             default: []
         });
 
