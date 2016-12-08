@@ -28,6 +28,7 @@ module.exports = _yeoman.Base.extend({
         this.log(_consts.SEPARATOR);
         [
             `                                                                                `,
+            `--------------------------------------------------------------------------------`
             ` This project uses cloud formation templates to create AWS resources required by`,
             ` the lambda function. Templates currently supported via yeoman are:             `,
             `   Lambda functions : ${yo} ${handlerSubGen}                                    `,
@@ -46,7 +47,8 @@ module.exports = _yeoman.Base.extend({
             ` review them all by running:                                                    `,
             `   ${grunt} ${gruntHelpCommand}                                                 `,
             `                                                                                `,
-            `--------------------------------------------------------------------------------`
+            `--------------------------------------------------------------------------------`,
+            `                                                                                `
         ].forEach((line) => {
             this.log(line);
         });

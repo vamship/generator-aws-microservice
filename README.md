@@ -1,19 +1,19 @@
-# generator-wysknd-lambda [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
+# generator-aws-microservice [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
 > Generates a sample project for a collection of AWS lambda functions along with optional cloud formation templates for resource generation
 
 ## Installation
 
-First, install [Yeoman](http://yeoman.io) and generator-wysknd-lambda using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).
+First, install [Yeoman](http://yeoman.io) and generator-aws-microservice using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).
 
 ```bash
 npm install -g yo
-npm install -g generator-wysknd-lambda
+npm install -g generator-aws-microservice
 ```
 
 Then generate your new project:
 
 ```bash
-yo wysknd-lambda
+yo aws-microservice
 ```
 
 ## Getting To Know Yeoman
@@ -28,9 +28,9 @@ yo wysknd-lambda
 MIT © [Vamshi K Ponnapalli]()
 
 
-[npm-image]: https://badge.fury.io/js/generator-wysknd-lambda.svg
-[npm-url]: https://npmjs.org/package/generator-wysknd-lambda
-[travis-image]: https://travis-ci.org/vamship/generator-wysknd-lambda.svg?branch=master
-[travis-url]: https://travis-ci.org/vamship/generator-wysknd-lambda
-[daviddm-image]: https://david-dm.org/vamship/generator-wysknd-lambda.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/vamship/generator-wysknd-lambda
+[npm-image]: https://badge.fury.io/js/generator-aws-microservice.svg
+[npm-url]: https://npmjs.org/package/generator-aws-microservice
+[travis-image]: https://travis-ci.org/vamship/generator-aws-microservice.svg?branch=master
+[travis-url]: https://travis-ci.org/vamship/generator-aws-microservice
+[daviddm-image]: https://david-dm.org/vamship/generator-aws-microservice.svg?theme=shields.io
+[daviddm-url]: https://david-dm.org/vamship/generator-aws-microservice
