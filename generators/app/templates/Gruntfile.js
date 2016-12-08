@@ -61,6 +61,15 @@ const HELP_TEXT =
 '                       wysknd-aws-cf-generator to generate cloud formation      \n' +
 '                       scripts.                                                 \n' +
 '                                                                                \n' +
+'  package            : Packages all lambda functions, and creates a package     \n' +
+'                       file for deployment.                                     \n' +
+'                                                                                \n' +
+'  deploy             : Packages and then automatically deploys all defined      \n' +
+'                       lambda functions in lambda-config.json. Note that the    \n' +
+'                       functions are created in AWS via cloudformation by       \n' +
+'                       running grunt cf:create. This method only updates the    \n' +
+'                       the function code.                                       \n' +
+'                                                                                \n' +
 ' Supported Options:                                                             \n' +
 '   --unit-test-suite : Can be used to specify a unit test suite to execute when \n' +
 '                       running tests. Useful when development is focused on a   \n' +

@@ -4,7 +4,8 @@ const _yeoman = require('yeoman-generator');
 const _prompts = require('../../utils/prompts');
 const _decamelize = require('decamelize');
 
-const SEPARATOR = '----------------------------------------';
+const _consts = require('../../utils/constants');
+
 module.exports = _yeoman.Base.extend({
     /**
      * Initializes the generator.
@@ -115,6 +116,14 @@ module.exports = _yeoman.Base.extend({
         };
     },
 
+    /**
+     * Shows a the title of the sub generator, and a brief description.
+     */
+    showTitle: function() {
+        this.log(_consts.SEPARATOR);
+        this.log('Create DynamoDB table:\n');
+    },
+
    /**
     * Gathers basic table information
     */
@@ -168,7 +177,7 @@ module.exports = _yeoman.Base.extend({
             .then(() => {
                 return this.prompt(prompts).then((props) => {
                     this.props = Object.assign(this.props || {}, props);
-                    this.log(SEPARATOR);
+                    this.log(_consts.SEPARATOR);
                 });
             });
     },
@@ -181,7 +190,7 @@ module.exports = _yeoman.Base.extend({
             if(repeat) {
                 return this.gatherLSIInfo();
             }
-            this.log(SEPARATOR);
+            this.log(_consts.SEPARATOR);
         });
     },
 

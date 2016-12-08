@@ -4,11 +4,22 @@ const _yeoman = require('yeoman-generator');
 const _prompts = require('../../utils/prompts');
 const _decamelize = require('decamelize');
 
+const _consts = require('../../utils/constants');
+
 module.exports = _yeoman.Base.extend({
+    /**
+     * Shows a the title of the sub generator, and a brief description.
+     */
+    showTitle: function() {
+        this.log(_consts.SEPARATOR);
+        this.log('Create IAM role for lambda functions:\n');
+    },
+
    /**
     * Gathers role information
     */
     gatherRoleInfo: function () {
+        this.log(_consts.SEPARATOR);
         this.props = this.props || {};
         this.props.roleName = this.options.roleName;
         const prompts = [];

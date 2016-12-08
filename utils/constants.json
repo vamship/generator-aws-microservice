@@ -1,0 +1,8 @@
+{
+    "SEPARATOR": "----------------------------------------",
+    "GENERATOR_NAME": "wysknd-lambda",
+    "SUB_GEN_LAMBDA": "function",
+    "SUB_GEN_TABLE": "table",
+    "SUB_GEN_ROLE": "role",
+    "SUB_GEN_FINISH": "_finish"
+}

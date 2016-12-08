@@ -5,6 +5,7 @@ const _camelCase = require('camelcase');
 const _decamelize = require('decamelize');
 
 const _prompts = require('../../utils/prompts');
+const _consts = require('../../utils/constants');
 
 module.exports = _yeoman.Base.extend({
     /**
@@ -22,6 +23,14 @@ module.exports = _yeoman.Base.extend({
                 return target;
             }
         };
+    },
+
+    /**
+     * Shows a the title of the sub generator, and a brief description.
+     */
+    showTitle: function() {
+        this.log(_consts.SEPARATOR);
+        this.log('Create lambda function handler:\n');
     },
 
     /**
@@ -148,25 +157,5 @@ module.exports = _yeoman.Base.extend({
              this.destinationPath(`test/unit/handlers/${this.props.lambdaSpecFile}.js`),
              this.props
          );
-     },
-
-    // /**
-    //  * Creates the necessary files for the lambda function, but includes no
-    //  * schema files.
-    //  */
-    //  createLambdaFunctionWithoutSchema() {
-    //      if(this.props.lambdaHasSchema) {
-    //          return;
-    //      }
-    //      this.fs.copyTpl(
-    //          this.templatePath(`src/handlers/handler.js`),
-    //          this.destinationPath(`src/handlers/${this.props.lambdaHandlerFile}.js`),
-    //          this.props
-    //      );
-    //      this.fs.copyTpl(
-    //          this.templatePath(`test/unit/handlers/handler-spec.js`),
-    //          this.destinationPath(`test/unit/handlers/${this.props.lambdaSpecFile}.js`),
-    //          this.props
-    //      );
-    //  }
+     }
 });
