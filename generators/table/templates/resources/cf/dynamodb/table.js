@@ -28,8 +28,11 @@ module.exports = (dirInfo) => {
 <% } -%>
             .setReadCapacity(<%= tableReadCapacity %>)
             .setWriteCapacity(<%= tableWriteCapacity %>)
-<% for(var indexName in tableIndexMap) { 
-    var indexInfo = tableIndexMap[indexName];                
+<%
+var indexCount = Object.keys(tableIndexMap).length;
+for(var indexName in tableIndexMap) {
+    var indexInfo = tableIndexMap[indexName];
+    indexCount--;
     if(!indexInfo.isGlobalIndex) { -%>
             .addLocalSecondaryIndex(
                 (new LocalSecondaryIndex('<%= indexName %>'))
@@ -45,15 +48,14 @@ module.exports = (dirInfo) => {
 <% } -%>
                 .setProjectionType('<%= indexInfo.projectionType %>')
 <% if(indexInfo.projectionType === 'INCLUDE') {
-    indexInfo.projectionAttributes.forEach((attr) => { 
+    indexInfo.projectionAttributes.forEach((attr) => {
         if(typeof attr === 'string' && attr.length > 0) { -%>
                 .addNonKeyAttribute('<%= attr %>')
-<% 
+<%
         }
     });
 } -%>
-            )
+            )<%= (indexCount<=0)?';':'' %>
 <% } -%>
-        ;
     });
 };
