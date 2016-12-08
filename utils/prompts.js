@@ -29,7 +29,7 @@ module.exports = {
                 type: 'input',
                 name: 'projectName',
                 message: 'Project name?',
-                default: config.projectName || gen.appname
+                default: (config.projectName || gen.appname).replace(/\s/g, '-')
             });
         }
 

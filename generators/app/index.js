@@ -18,7 +18,6 @@ module.exports = _yeoman.Base.extend({
         return _prompts.getProjectInfo(this, true)
             .then(() => { return _prompts.getAuthorInfo(this, true) })
             .then(() => { return _prompts.getAwsInfo(this, true) });
-
     },
 
     /**
@@ -58,7 +57,7 @@ module.exports = _yeoman.Base.extend({
         this.composeWith(`${_consts.GENERATOR_NAME}:${_consts.SUB_GEN_ROLE}`, {
             options: {
                 projectPrefix: this.props.projectPrefix,
-                roleName: 'lambda_role'
+                roleName: 'default_lambda_role'
             }
         });
         // this.composeWith(`${_consts.GENERATOR_NAME}:${_consts.SUB_GEN_TABLE}`);

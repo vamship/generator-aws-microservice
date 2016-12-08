@@ -12,7 +12,12 @@ module.exports = _yeoman.Base.extend({
      */
     showTitle: function() {
         this.log(_consts.SEPARATOR);
-        this.log('Create IAM role for lambda functions:\n');
+        this.log('Create IAM role for lambda functions:');
+        if(this.options.roleName) {
+            this.log(` Role name: ${this.options.roleName}\n`);
+        } else {
+            this.log();
+        }
     },
 
    /**
@@ -28,7 +33,7 @@ module.exports = _yeoman.Base.extend({
                 type: 'input',
                 name: 'roleName',
                 message: 'Role name?',
-                default: `lambda_role`
+                default: `default_lambda_role`
             });
         }
         prompts.push({
@@ -74,8 +79,9 @@ module.exports = _yeoman.Base.extend({
     generateTargetFileNames: function() {
         const templateFile = _decamelize(this.props.roleName)
                                 .replace(/_/g, '-');
+        const roleSuffix = templateFile.endsWith('-role')?'':'-role';
 
-        this.props.roleTemplateFile = `${templateFile}`;
+        this.props.roleTemplateFile = `${templateFile}${roleSuffix}`;
     },
 
     /**

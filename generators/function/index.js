@@ -13,16 +13,6 @@ module.exports = _yeoman.Base.extend({
      */
     constructor: function() {
         _yeoman.Base.apply(this, arguments);
-
-        this._stripPrefix = (target) => {
-            const prefix = this.props.projectPrefix;
-
-            if(target.indexOf(prefix) === 0) {
-                return target.replace(`${prefix}-`, '');
-            } else {
-                return target;
-            }
-        };
     },
 
     /**
@@ -41,15 +31,12 @@ module.exports = _yeoman.Base.extend({
             type: 'input',
             name: 'lambdaFunctionName',
             message: 'Lambda function name?',
-            default: answer => `${this.props.projectPrefix}-hello_world`
+            default: answer => `hello_world`
         }, {
             type: 'input',
             name: 'lambdaHandlerName',
             message: 'Lambda handler name?',
-            default: (answers) => {
-                const handlerName = this._stripPrefix(answers.lambdaFunctionName);
-                return `index.${_camelCase(handlerName)}Handler`
-            }
+            default: answers => `index.${_camelCase(answers.lambdaFunctionName)}Handler`
         }, {
             type: 'input',
             name: 'lambdaDescription',
@@ -83,8 +70,8 @@ module.exports = _yeoman.Base.extend({
      * Generates target file names.
      */
     generateTargetFileNames: function() {
-        let handlerFile = this._stripPrefix(this.props.lambdaFunctionName);
-        handlerFile = _decamelize(handlerFile).replace(/_/g, '-');
+        const handlerFile = _decamelize(this.props.lambdaFunctionName)
+                                .replace(/_/g, '-');
 
         this.props.lambdaHandlerFile = `${handlerFile}-handler`;
         this.props.lambdaSchemaFile = `${handlerFile}-schema`;
@@ -101,7 +88,7 @@ module.exports = _yeoman.Base.extend({
             }
         );
         const lambdaDefinition = {
-            functionName: this.props.lambdaFunctionName,
+            functionName: `${this.props.projectPrefix}-${this.props.lambdaFunctionName}`,
             handlerName: this.props.lambdaHandlerName,
             fileName: this.props.lambdaHandlerFile
         };

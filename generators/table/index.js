@@ -212,7 +212,7 @@ module.exports = _yeoman.Base.extend({
         const templateFile = _decamelize(this.props.tableName)
                                 .replace(/_/g, '-');
 
-        this.props.tableTemplateFile = `${templateFile}`;
+        this.props.tableTemplateFile = `${templateFile}-table`;
     },
 
     /**
