@@ -38,8 +38,8 @@ module.exports = (dirInfo) => {
         .addPolicy('dynamoDbReadWritePolicy',
             (new PolicyDocument())
             .addStatement((new PolicyStatement())
-                .addAction('*')
-                .addResource('dynamodb:*')
+                .addAction('dynamodb:*')
+                .addResource('*')
             )
         )
 <% } -%>
