@@ -11,5 +11,5 @@ _lambdaConfig.lambdas.forEach((definition) => {
     const handlerName = definition.handlerName.split('.')[1];
     const handler = require(`./handlers/${definition.fileName}`);
 
-    exports[handlerName] = wrapper.wrap(handler, handlerName);
+    exports[handlerName] = _wrapper.wrap(handler, handlerName);
 });

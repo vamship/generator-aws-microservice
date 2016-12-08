@@ -7,7 +7,7 @@ const _checkSchema = _schemaHelper.buildSchemaChecker(_schema);
 <%} %>
 /**
  * <%= lambdaDescription %>
- * 
+ *
  * @param {Object} event The lambda event object
  * @param {Object} context The lambda context object
  * @param {Function} callback A callback method to signal the completion
@@ -18,7 +18,7 @@ const _checkSchema = _schemaHelper.buildSchemaChecker(_schema);
 module.exports = function(event, context, callback, ext) {
     const logger = ext.logger;
     const config = ext.config;
-    <%if (lambdaHasSchema) {%>
+<%if (lambdaHasSchema) {%>
     let error = _checkSchema(event, callback);
 
     if (error) {
@@ -26,7 +26,7 @@ module.exports = function(event, context, callback, ext) {
         callback(error);
         return;
     }
-    <%} %>
+<%} %>
     //TODO: Implement function and invoke callback.
     callback(null, 'Lambda function [<%= lambdaFunctionName %>] executed successfully');
 };

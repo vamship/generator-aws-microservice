@@ -10,39 +10,38 @@ module.exports = (dirInfo) => {
     const key = dirInfo.getRootToken(roleName);
 
     return new RoleTemplate(key, roleName)
-                .addAwsManagedPolicy('service-role/AWSLambdaBasicExecutionRole')
-                .setAssumePolicy(
-                    (new PolicyDocument())
-                    .addStatement((new PolicyStatement())
-                        .addAction('sts:AssumeRole')
-                        .addServicePrincipal('lambda.amazonaws.com'))
-                )
+        .setAssumePolicy(
+            (new PolicyDocument())
+            .addStatement((new PolicyStatement())
+                .addAction('sts:AssumeRole')
+                .addServicePrincipal('lambda.amazonaws.com'))
+        )
 <% if(rolePolicies.indexOf('ALL_ACCESS') >= 0) { -%>
-                .addAwsManagedPolicy('AWSLambdaFullAccess');
+        .addAwsManagedPolicy('AWSLambdaFullAccess')
 <% } -%>
 <% if(rolePolicies.indexOf('DYNAMO_READ_ONLY') >= 0) { -%>
-                .addAwsManagedPolicy('service-role/AWSLambdaDynamoDBExecutionRole');
+        .addAwsManagedPolicy('service-role/AWSLambdaDynamoDBExecutionRole')
 <% } -%>
 <% if(rolePolicies.indexOf('S3_READ_WRITE') >= 0) { -%>
-                .addAwsManagedPolicy('AmazonS3ReadOnlyAccess');
+        .addAwsManagedPolicy('AmazonS3ReadOnlyAccess')
 <% } -%>
 <% if(rolePolicies.indexOf('S3_READ_WRITE') >= 0) { -%>
-                .addAwsManagedPolicy('AmazonS3FullAccess');
+        .addAwsManagedPolicy('AmazonS3FullAccess')
 <% } -%>
 <% if(rolePolicies.indexOf('LAMBDA_INVOKE') >= 0) { -%>
-                .addAwsManagedPolicy('service-role/AWSLambdaRole');
+        .addAwsManagedPolicy('service-role/AWSLambdaRole')
 <% } -%>
 <% if(rolePolicies.indexOf('KINESIS_READ_ONLY') >= 0) { -%>
-                .addAwsManagedPolicy('service-role/AWSLambdaKinesisExecutionRole');
+        .addAwsManagedPolicy('service-role/AWSLambdaKinesisExecutionRole')
 <% } -%>
 <% if(rolePolicies.indexOf('DYNAMO_READ_WRITE') >= 0) { -%>
-                .addPolicy('dynamoDbReadWritePolicy', 
-                    (new PolicyDocument())
-                    .addStatement((new PolicyStatement())
-                        .addAction('*')
-                        .addResource('dynamodb:*')
-                    )
-                )
+        .addPolicy('dynamoDbReadWritePolicy',
+            (new PolicyDocument())
+            .addStatement((new PolicyStatement())
+                .addAction('*')
+                .addResource('dynamodb:*')
+            )
+        )
 <% } -%>
-                ;
+        .addAwsManagedPolicy('service-role/AWSLambdaBasicExecutionRole');
 };
