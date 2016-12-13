@@ -10,7 +10,7 @@ const GlobalSecondaryIndex = DynamoDbTemplates.GlobalSecondaryIndex;
  * Returns the table definition for the <%= tableName %> table.
  */
 module.exports = (dirInfo) => {
-
+<% var indexNames = Object.keys(tableIndexMap); %>
     const environments = [
 <% tableTargetEnvironments.forEach((env, index) => { -%>
         '<%= env %>'<%= (index<tableTargetEnvironments.length -1)? ',':'' %>
@@ -27,12 +27,10 @@ module.exports = (dirInfo) => {
             .addKey('<%= tableRangeKey %>', '<%= tableRangeKeyType %>', 'RANGE')
 <% } -%>
             .setReadCapacity(<%= tableReadCapacity %>)
-            .setWriteCapacity(<%= tableWriteCapacity %>)
+            .setWriteCapacity(<%= tableWriteCapacity %>)<%= (indexNames.length > 0)? '\n':';\n' -%>
 <%
-var indexCount = Object.keys(tableIndexMap).length;
-for(var indexName in tableIndexMap) {
+indexNames.forEach((indexName, index) => {
     var indexInfo = tableIndexMap[indexName];
-    indexCount--;
     if(!indexInfo.isGlobalIndex) { -%>
             .addLocalSecondaryIndex(
                 (new LocalSecondaryIndex('<%= indexName %>'))
@@ -55,7 +53,7 @@ for(var indexName in tableIndexMap) {
         }
     });
 } -%>
-            )<%= (indexCount<=0)?';':'' %>
-<% } -%>
+            )<%= (index>=indexNames.length - 1)?';':'' %>
+<% }); -%>
     });
 };
