@@ -1,7 +1,11 @@
 {
+    "test/integration/*-spec.js": {
+        "alternate": "src/{}.js",
+        "type": "integration-test"
+    },
     "test/unit/*-spec.js": {
         "alternate": "src/{}.js",
-        "type": "test"
+        "type": "unit-test"
     },
     "src/*.js": {
         "alternate": "test/unit/{}-spec.js",

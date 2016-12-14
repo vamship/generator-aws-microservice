@@ -1,0 +1,9 @@
+{
+    "log": {
+        "level": "debug"
+    },
+    "aws": {
+        "region": "<%= awsRegion %>",
+        "profile": "<%= awsProfile %>"
+    }
+}

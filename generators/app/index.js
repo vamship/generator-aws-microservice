@@ -33,6 +33,7 @@ module.exports = _yeoman.Base.extend({
             '_npmignore',
             '_projections.json',
             'config/default.json',
+            'config/local_dev.json',
             'config/dev.json',
             'config/prod.json',
             'config/custom-environment-variables.json',

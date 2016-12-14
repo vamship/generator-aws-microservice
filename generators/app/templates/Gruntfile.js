@@ -35,10 +35,12 @@ const HELP_TEXT =
 '                                                                                \n' +
 '   monitor:[opt1]:   : Monitors files for changes, and triggers actions based   \n' +
 '           [opt2]:     on specified options. Supported options are as follows:  \n' +
-'                         [lint]   : Performs linting with default options       \n' +
+'           [opt3]       [lint]    : Performs linting with default options       \n' +
 '                                    against all source files.                   \n' +
-'                         [unit]   : Executes unit tests against all source      \n' +
+'                        [unit]    : Executes unit tests against all source      \n' +
 '                                    files.                                      \n' +
+'                        [integration] : Executes integration tests against all  \n' +
+'                                        source files.                           \n' +
 '                                                                                \n' +
 '                       Multiple options may be specified, and the triggers will \n' +
 '                       be executed in the order specified. If a specific task   \n' +
@@ -49,7 +51,8 @@ const HELP_TEXT =
 '                                                                                \n' +
 '   format            : Formats source and test files.                           \n' +
 '                                                                                \n' +
-'   test:unit         : Executes unit tests against source files.                \n' +
+'   test:[unit|       : Executes unit or integration tests against source files. \n' +
+'         integration]                                                           \n' +
 '                                                                                \n' +
 '   bump:[major|minor]: Updates the version number of the package. By default,   \n' +
 '                       this task only increments the patch version number. Major\n' +
@@ -71,7 +74,7 @@ const HELP_TEXT =
 '                       the function code.                                       \n' +
 '                                                                                \n' +
 ' Supported Options:                                                             \n' +
-'   --unit-test-suite : Can be used to specify a unit test suite to execute when \n' +
+'   --test-suite      : Can be used to specify a unit test suite to execute when \n' +
 '                       running tests. Useful when development is focused on a   \n' +
 '                       small section of the app, and there is no need to retest \n' +
 '                       all components when runing a watch.                      \n' +
@@ -107,7 +110,8 @@ module.exports = function(grunt) {
             'src': null,                    /*  |--- src                      */
             'config': null,                 /*  |--- config                   */
             'test': {                       /*  |--- test                     */
-                'unit': null                /*  |   |--- unit                 */
+                'unit': null,               /*  |   |--- unit                 */
+                'integration': null         /*  |   |--- integration          */
             },                              /*  |                             */
             'resources': {                  /*  |--- resources                */
                 'cf': null,                 /*  |    | --- cf                 */
@@ -121,10 +125,6 @@ module.exports = function(grunt) {
 
     ENV.ROOT = _folder.createFolderTree('./', ENV.tree);
 
-    // This is the root url prefix for the app, and represents the path
-    // (relative to root), where the app will be available. This value should
-    // remain unchanged for most apps, but can be tweaked here if necessary.
-    ENV.appRoot = '/' + ENV.appName;
     (function _createTreeRefs(parent, subTree) {
         for(let folder in subTree) {
             const folderName = folder.replace('.', '_');
@@ -200,7 +200,8 @@ module.exports = function(grunt) {
                 reporter: 'spec',
                 colors: true
             },
-            default: [ TEST.unit.allFilesPattern('js') ]
+            unit: [ TEST.unit.allFilesPattern('js') ],
+            integration: [ TEST.integration.allFilesPattern('js') ]
         },
 
         /**
@@ -523,7 +524,7 @@ module.exports = function(grunt) {
 
             if(testType === 'unit') {
                 testAction = 'mocha_istanbul:default';
-                const unitTestSuite = grunt.option('unit-test-suite');
+                const unitTestSuite = grunt.option('test-suite');
                 if(typeof unitTestSuite === 'string' && unitTestSuite.length > 0) {
                     grunt.log.writeln('Running test suite: ', unitTestSuite);
                     grunt.config.set('mocha_istanbul.default', TEST.unit.getChildPath(unitTestSuite));
@@ -553,8 +554,11 @@ module.exports = function(grunt) {
                 if (arg === 'lint') {
                     tasks.push('lint');
 
-                } else if ('unit' === arg) {
+                } else if (arg === 'unit') {
                     tasks.push('test:unit');
+
+                } else if (arg === 'integration') {
+                    tasks.push('test:integration');
 
                 } else {
                     // Unrecognized argument.
