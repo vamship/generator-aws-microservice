@@ -40,7 +40,7 @@
     "wysknd-aws-cf-generator": "^1.1.0",
     "wysknd-lib": "0.0.2",
     "wysknd-log": "0.0.4",
-    "wysknd-test": "^2.4.1"
+    "wysknd-test": "^3.1.0"
   },
   "dependencies": {
     "ajv": "^4.2.0",
