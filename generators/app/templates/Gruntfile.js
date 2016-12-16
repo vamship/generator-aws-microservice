@@ -522,12 +522,12 @@ module.exports = function(grunt) {
         function(testType) {
             let testAction;
 
-            if(testType === 'unit') {
-                testAction = 'mocha_istanbul:default';
-                const unitTestSuite = grunt.option('test-suite');
-                if(typeof unitTestSuite === 'string' && unitTestSuite.length > 0) {
-                    grunt.log.writeln('Running test suite: ', unitTestSuite);
-                    grunt.config.set('mocha_istanbul.default', TEST.unit.getChildPath(unitTestSuite));
+            if(['unit', 'e2e'].indexOf(testType) >= 0) {
+                testAction = `mocha_istanbul:${testType}`;
+                const testSuite = grunt.option('test-suite');
+                if(typeof testSuite === 'string' && testSuite.length > 0) {
+                    grunt.log.writeln('Running test suite: ', testSuite);
+                    grunt.config.set(`mocha_istanbul.${testType}`, TEST.unit.getChildPath(testSuite));
                 }
             }
 
@@ -538,7 +538,6 @@ module.exports = function(grunt) {
             }
         }
     );
-
 
     // Monitor task - track changes on different sources, and enable auto
     // execution of tests if requested.
