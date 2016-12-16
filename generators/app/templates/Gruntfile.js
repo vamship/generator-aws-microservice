@@ -39,8 +39,8 @@ const HELP_TEXT =
 '                                    against all source files.                   \n' +
 '                        [unit]    : Executes unit tests against all source      \n' +
 '                                    files.                                      \n' +
-'                        [integration] : Executes integration tests against all  \n' +
-'                                        source files.                           \n' +
+'                        [e2e]     : Executes all defined end to end tests for   \n' +
+'                                    the project.                                \n' +
 '                                                                                \n' +
 '                       Multiple options may be specified, and the triggers will \n' +
 '                       be executed in the order specified. If a specific task   \n' +
@@ -51,8 +51,8 @@ const HELP_TEXT =
 '                                                                                \n' +
 '   format            : Formats source and test files.                           \n' +
 '                                                                                \n' +
-'   test:[unit|       : Executes unit or integration tests against source files. \n' +
-'         integration]                                                           \n' +
+'   test:[unit|       : Executes unit or e2e tests against source files.         \n' +
+'         e2e]                                                                   \n' +
 '                                                                                \n' +
 '   bump:[major|minor]: Updates the version number of the package. By default,   \n' +
 '                       this task only increments the patch version number. Major\n' +
@@ -111,7 +111,7 @@ module.exports = function(grunt) {
             'config': null,                 /*  |--- config                   */
             'test': {                       /*  |--- test                     */
                 'unit': null,               /*  |   |--- unit                 */
-                'integration': null         /*  |   |--- integration          */
+                'e2e': null                 /*  |   |--- e2e                  */
             },                              /*  |                             */
             'resources': {                  /*  |--- resources                */
                 'cf': null,                 /*  |    | --- cf                 */
@@ -201,7 +201,7 @@ module.exports = function(grunt) {
                 colors: true
             },
             unit: [ TEST.unit.allFilesPattern('js') ],
-            integration: [ TEST.integration.allFilesPattern('js') ]
+            e2e: [ TEST.e2e.allFilesPattern('js') ]
         },
 
         /**
@@ -557,8 +557,8 @@ module.exports = function(grunt) {
                 } else if (arg === 'unit') {
                     tasks.push('test:unit');
 
-                } else if (arg === 'integration') {
-                    tasks.push('test:integration');
+                } else if (arg === 'e2e') {
+                    tasks.push('test:e2e');
 
                 } else {
                     // Unrecognized argument.
