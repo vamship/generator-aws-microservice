@@ -1,0 +1,6 @@
+{
+    "plugins": [ "esformatter-remove-trailing-commas" ],
+    "indent": {
+        "value": "    "
+    }
+}

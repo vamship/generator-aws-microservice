@@ -22,7 +22,6 @@ describe('[<%= lambdaHandlerName %>]', () => {
 <%if (lambdaHasSchema) {-%>
     const DEFAULT_FIRST_NAME = 'John';
     const DEFAULT_LAST_NAME = 'Doe';
-    const DEFAULT_MIDDLE_NAME = 'Samuel';
 <%} -%>
     function _createWrapper(event, alias, config) {
         event = event || {};

@@ -75,7 +75,7 @@ module.exports = _yeoman.Base.extend({
 
         this.props.lambdaHandlerFile = `${handlerFile}-handler`;
         this.props.lambdaSchemaFile = `${handlerFile}-schema`;
-        this.props.lambdaSpecFile = `${handlerFile}-spec`;
+        this.props.lambdaSpecFile = `${handlerFile}-handler-spec`;
     },
 
     /**

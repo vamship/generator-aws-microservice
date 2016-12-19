@@ -1,7 +1,5 @@
-/* jshint node:true */
 'use strict';
 
-const _fs = require('fs');
 const _folder = require('wysknd-lib').folder;
 const _utils = require('wysknd-lib').utils;
 const _lambdaConfig = require('./lambda-config.json');
@@ -232,13 +230,12 @@ module.exports = function(grunt) {
             }
         },
 
-
         /**
-         * Configuration for grunt-jsbeautifier, which is used to:
-         *  - Beautify all javascript, html and css files  prior to checkin.
+         * Configuration for grunt-esformatter, which is used to:
+         *  - Format javascript source code
          */
-        jsbeautifier: {
-            dev: [
+        esformatter: {
+            src: [
                 SRC.allFilesPattern('js'),
                 RESOURCES.cf.allFilesPattern('js'),
                 TEST.allFilesPattern('js')
@@ -246,25 +243,16 @@ module.exports = function(grunt) {
         },
 
         /**
-         * Configuration for grunt-contrib-jshint, which is used to:
-         *  - Monitor all source/test files and trigger actions when these
-         *    files change.
+         * Configuration for grunt-eslint, which is used to:
+         *  - Lint source and test files.
          */
-        jshint: {
-            options: {
-                reporter: require('jshint-stylish'),
-                esversion: 6,
-                node: true,
-                mocha: true,
-                // This is because we are using Bluebird to override native
-                // promise implementations, and that results in linting errors
-                // for redefinition of "Promise"
-                predef: [ "-Promise" ]
-            },
-            dev: [ 'Gruntfile.js',
-                    SRC.allFilesPattern('js'),
-                    RESOURCES.cf.allFilesPattern('js'),
-                    TEST.allFilesPattern('js') ]
+        eslint: {
+            dev: [
+                'Gruntfile.js',
+                SRC.allFilesPattern('js'),
+                RESOURCES.cf.allFilesPattern('js'),
+                TEST.allFilesPattern('js')
+            ]
         },
 
         /**
@@ -496,7 +484,6 @@ module.exports = function(grunt) {
                         return;
                     }
                     const arn = `${arnPrefix}${config.functionName}`;
-                    const handlerName = config.handlerName;
                     const taskName = config.functionName;
 
                     // Create a different task for each call, because the calls are
@@ -549,7 +536,7 @@ module.exports = function(grunt) {
             const tasks = [];
 
             // Process the arguments (specified as subtasks).
-            Array.prototype.slice.call(arguments).forEach((arg, index) => {
+            Array.prototype.slice.call(arguments).forEach((arg) => {
                 if (arg === 'lint') {
                     tasks.push('lint');
 
@@ -561,7 +548,7 @@ module.exports = function(grunt) {
 
                 } else {
                     // Unrecognized argument.
-                    console.warn('Unrecognized argument: %s', arg);
+                    grunt.log.warn('Unrecognized argument: %s', arg);
                 }
             });
 
@@ -618,12 +605,12 @@ module.exports = function(grunt) {
     /**
      * Lint task - checks source and test files for linting errors.
      */
-    grunt.registerTask('lint', [ 'jshint:dev' ]);
+    grunt.registerTask('lint', [ 'eslint:dev' ]);
 
     /**
      * Formatter task - formats all source and test files.
      */
-    grunt.registerTask('format', [ 'jsbeautifier:dev' ]);
+    grunt.registerTask('format', [ 'esformatter' ]);
 
     /**
      * Shows help information on how to use the Grunt tasks.

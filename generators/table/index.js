@@ -26,18 +26,19 @@ module.exports = _yeoman.Base.extend({
                 name: 'tableIndexHashKey',
                 message: 'Index hash key?',
                 default: 'hashKey',
-                when: (answers) => answers.tableIndexCreate
+                when: (answers) => isGlobal && answers.tableIndexCreate
             }, {
                 type: 'list',
                 choices: [ 'N', 'S', 'B' ],
                 name: 'tableIndexHashKeyType',
                 message: 'Index hash key type?',
                 default: 'S',
-                when: (answers) => answers.tableIndexCreate
+                when: (answers) => isGlobal && answers.tableIndexCreate
             }, {
                 type: 'input',
                 name: 'tableIndexRangeKey',
-                message: 'Index range key? (leave empty if not required)',
+                message: 'Index range key? (Required)',
+                default: 'rangeKey',
                 when: (answers) => answers.tableIndexCreate
             }, {
                 type: 'list',
@@ -65,8 +66,8 @@ module.exports = _yeoman.Base.extend({
                 name: 'tableIndexName',
                 message: 'Index name?',
                 default: (answers) => {
-                    const rangeToken = !!(answers.tableIndexRangeKey)? `${answers.tableIndexRangeKey}-`:'';
-                    return `${answers.tableIndexHashKey}-${rangeToken}index`;
+                    const hashKey = answers.tableIndexHashKey || this.props.tableHashKey;
+                    return `${hashKey}-${answers.tableIndexRangeKey}-index`;
                 },
                 when: (answers) => answers.tableIndexCreate
             }, {
@@ -92,8 +93,8 @@ module.exports = _yeoman.Base.extend({
                     const indexInfo = {
                         name: props.tableIndexName,
                         isGlobalIndex: isGlobal,
-                        hashKey: props.tableIndexHashKey,
-                        hashKeyType: props.tableIndexHashKeyType,
+                        hashKey: isGlobal? props.tableIndexHashKey:this.props.tableHashKey,
+                        hashKeyType: isGlobal?props.tableIndexHashKeyType:this.props.tableHashKeyType,
                         rangeKey: props.tableIndexRangeKey,
                         rangeKeyType: props.tableIndexRangeKeyType,
                         projectionType: props.tableIndexProjectionType,

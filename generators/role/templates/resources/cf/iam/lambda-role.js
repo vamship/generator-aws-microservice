@@ -12,10 +12,9 @@ module.exports = (dirInfo) => {
     return new RoleTemplate(key, roleName)
         .setAssumePolicy(
             (new PolicyDocument())
-            .addStatement((new PolicyStatement())
-                .addAction('sts:AssumeRole')
-                .addServicePrincipal('lambda.amazonaws.com'))
-        )
+                .addStatement((new PolicyStatement())
+                    .addAction('sts:AssumeRole')
+                    .addServicePrincipal('lambda.amazonaws.com')))
 <% if(rolePolicies.indexOf('ALL_ACCESS') >= 0) { -%>
         .addAwsManagedPolicy('AWSLambdaFullAccess')
 <% } -%>
