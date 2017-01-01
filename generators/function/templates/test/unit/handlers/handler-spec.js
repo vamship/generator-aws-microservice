@@ -32,7 +32,7 @@ describe('[<%= lambdaHandlerName %>]', () => {
         event.user.lastName = event.user.lastName || DEFAULT_LAST_NAME;
 <%} -%>
         const contextInfo = {
-            alias: alias
+            alias
         };
 
         config = config || {};
