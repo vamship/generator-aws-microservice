@@ -2,7 +2,7 @@
 
 const HandlerWrapper = require('wysknd-aws-lambda').HandlerWrapper;
 const _wrapper = new HandlerWrapper('<%= projectName %>');
-const _lambdaConfig = require('../lambda-config.json');
+const _lambdaConfig = require('./lambda-config.json');
 
 /**
  * Dynamically load and export handlers.

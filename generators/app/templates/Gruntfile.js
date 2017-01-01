@@ -2,7 +2,7 @@
 
 const _folder = require('wysknd-lib').folder;
 const _utils = require('wysknd-lib').utils;
-const _lambdaConfig = require('./lambda-config.json');
+const _lambdaConfig = require('./src/lambda-config.json');
 const _awsSdk = require('aws-sdk');
 
 // Need to set project specific options here.

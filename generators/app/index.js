@@ -28,7 +28,6 @@ module.exports = _yeoman.Base.extend({
             'package.json',
             'Gruntfile.js',
             'README.md',
-            'lambda-config.json',
             '_gitignore',
             '_npmignore',
             '_projections.json',
@@ -39,6 +38,8 @@ module.exports = _yeoman.Base.extend({
             'config/dev.json',
             'config/prod.json',
             'config/custom-environment-variables.json',
+            'resources/cf/lambda/lambda-functions.js',
+            'src/lambda-config.json',
             'src/index.js',
             'test/unit/index-spec.js'
         ].forEach((srcFile) => {

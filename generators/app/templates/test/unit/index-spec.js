@@ -7,7 +7,7 @@ _chai.use(require('chai-as-promised'));
 const expect = _chai.expect;
 
 const _index = require('../../src/index');
-const _lambdaConfig = require('../../lambda-config.json');
+const _lambdaConfig = require('../../src/lambda-config.json');
 
 describe('_index', () => {
     describe('[handlers]', () => {
