@@ -1,0 +1,120 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/Users/vponnap2/.nvm/versions/node/v4.3.2/bin/node',
+1 verbose cli   '/Users/vponnap2/.nvm/versions/node/v4.3.2/bin/npm',
+1 verbose cli   'publish' ]
+2 info using npm@2.14.12
+3 info using node@v4.3.2
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/Users/vponnap2/projects/wysknd/generator-aws-microservice',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /Users/vponnap2/.npm/generator-aws-microservice/0.0.4/package.tgz not in flight; packing
+9 verbose tar pack [ '/Users/vponnap2/.npm/generator-aws-microservice/0.0.4/package.tgz',
+9 verbose tar pack   '/Users/vponnap2/projects/wysknd/generator-aws-microservice' ]
+10 verbose tarball /Users/vponnap2/.npm/generator-aws-microservice/0.0.4/package.tgz
+11 verbose folder /Users/vponnap2/projects/wysknd/generator-aws-microservice
+12 info prepublish generator-aws-microservice@0.0.4
+13 verbose unsafe-perm in lifecycle true
+14 verbose addLocalTarball adding from inside cache /Users/vponnap2/.npm/generator-aws-microservice/0.0.4/package.tgz
+15 silly cache afterAdd generator-aws-microservice@0.0.4
+16 verbose afterAdd /Users/vponnap2/.npm/generator-aws-microservice/0.0.4/package/package.json not in flight; writing
+17 verbose afterAdd /Users/vponnap2/.npm/generator-aws-microservice/0.0.4/package/package.json written
+18 silly publish { name: 'generator-aws-microservice',
+18 silly publish   version: '0.0.4',
+18 silly publish   description: 'Generates a sample project for a collection of AWS lambda functions along with optional cloud formation templates for resource generation',
+18 silly publish   homepage: 'https://github.com/vamship/generator-aws-microservice#readme',
+18 silly publish   author:
+18 silly publish    { name: 'Vamshi K Ponnapalli',
+18 silly publish      email: 'vamshi.ponnapalli@gmail.com' },
+18 silly publish   files: [ 'generators', 'utils' ],
+18 silly publish   main: 'generators/index.js',
+18 silly publish   keywords: [ 'aws', 'lambda', 'cloud formation', 'yeoman-generator' ],
+18 silly publish   dependencies:
+18 silly publish    { camelcase: '^4.0.0',
+18 silly publish      chalk: '^1.0.0',
+18 silly publish      decamelize: '^1.2.0',
+18 silly publish      'yeoman-generator': '^0.23.0',
+18 silly publish      yosay: '^1.0.0' },
+18 silly publish   devDependencies:
+18 silly publish    { 'yeoman-test': '^1.0.0',
+18 silly publish      'yeoman-assert': '^2.0.0',
+18 silly publish      eslint: '^3.1.1',
+18 silly publish      'eslint-config-xo-space': '^0.15.0',
+18 silly publish      gulp: '^3.9.0',
+18 silly publish      'gulp-eslint': '^3.0.1',
+18 silly publish      'gulp-exclude-gitignore': '^1.0.0',
+18 silly publish      'gulp-line-ending-corrector': '^1.0.1',
+18 silly publish      'gulp-istanbul': '^1.0.0',
+18 silly publish      'gulp-mocha': '^3.0.1',
+18 silly publish      'gulp-plumber': '^1.0.0',
+18 silly publish      'gulp-nsp': '^2.1.0' },
+18 silly publish   eslintConfig: { extends: 'xo-space', env: { mocha: true } },
+18 silly publish   repository:
+18 silly publish    { type: 'git',
+18 silly publish      url: 'git+https://github.com/vamship/generator-aws-microservice.git' },
+18 silly publish   scripts: { prepublish: 'gulp prepublish', test: 'gulp' },
+18 silly publish   license: 'MIT',
+18 silly publish   readme: '# generator-aws-microservice [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]\n> Generates a sample project for a collection of AWS lambda functions along with optional cloud formation templates for resource generation\n\n## Installation\n\nFirst, install [Yeoman](http://yeoman.io) and generator-aws-microservice using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).\n\n```bash\nnpm install -g yo\nnpm install -g generator-aws-microservice\n```\n\nThen generate your new project:\n\n```bash\nyo aws-microservice\n```\n\n## Getting To Know Yeoman\n\n * Yeoman has a heart of gold.\n * Yeoman is a person with feelings and opinions, but is very easy to work with.\n * Yeoman can be too opinionated at times but is easily convinced not to be.\n * Feel free to [learn more about Yeoman](http://yeoman.io/).\n\n## License\n\nMIT © [Vamshi K Ponnapalli]()\n\n\n[npm-image]: https://badge.fury.io/js/generator-aws-microservice.svg\n[npm-url]: https://npmjs.org/package/generator-aws-microservice\n[travis-image]: https://travis-ci.org/vamship/generator-aws-microservice.svg?branch=master\n[travis-url]: https://travis-ci.org/vamship/generator-aws-microservice\n[daviddm-image]: https://david-dm.org/vamship/generator-aws-microservice.svg?theme=shields.io\n[daviddm-url]: https://david-dm.org/vamship/generator-aws-microservice\n',
+18 silly publish   readmeFilename: 'README.md',
+18 silly publish   gitHead: '6769704826f64f7dcb4a4a3dc0c028b1af486f82',
+18 silly publish   bugs: { url: 'https://github.com/vamship/generator-aws-microservice/issues' },
+18 silly publish   _id: 'generator-aws-microservice@0.0.4',
+18 silly publish   _shasum: '0a61786eb336028d776eda572b414afb2d642ab8',
+18 silly publish   _from: '.' }
+19 verbose getPublishConfig undefined
+20 silly mapToRegistry name generator-aws-microservice
+21 silly mapToRegistry using default registry
+22 silly mapToRegistry registry https://registry.npmjs.org/
+23 silly mapToRegistry uri https://registry.npmjs.org/generator-aws-microservice
+24 verbose publish registryBase https://registry.npmjs.org/
+25 silly publish uploading /Users/vponnap2/.npm/generator-aws-microservice/0.0.4/package.tgz
+26 verbose request uri https://registry.npmjs.org/generator-aws-microservice
+27 verbose request sending authorization for write operation
+28 info attempt registry request try #1 at 10:29:04 AM
+29 verbose request using bearer token for auth
+30 verbose request id 6842da321fa747c7
+31 http request PUT https://registry.npmjs.org/generator-aws-microservice
+32 http 403 https://registry.npmjs.org/generator-aws-microservice
+33 verbose headers { 'content-type': 'application/json',
+33 verbose headers   'cache-control': 'max-age=300',
+33 verbose headers   'content-length': '95',
+33 verbose headers   'accept-ranges': 'bytes',
+33 verbose headers   date: 'Sun, 01 Jan 2017 15:28:49 GMT',
+33 verbose headers   via: '1.1 varnish',
+33 verbose headers   connection: 'keep-alive',
+33 verbose headers   'x-served-by': 'cache-iad2140-IAD',
+33 verbose headers   'x-cache': 'MISS',
+33 verbose headers   'x-cache-hits': '0',
+33 verbose headers   'x-timer': 'S1483284528.867315,VS0,VE981',
+33 verbose headers   vary: 'Accept-Encoding' }
+34 verbose request invalidating /Users/vponnap2/.npm/registry.npmjs.org/generator-aws-microservice on PUT
+35 error publish Failed PUT 403
+36 verbose stack Error: "You cannot publish over the previously published version 0.0.4." : generator-aws-microservice
+36 verbose stack     at makeError (/Users/vponnap2/.nvm/versions/node/v4.3.2/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:264:12)
+36 verbose stack     at CachingRegistryClient.<anonymous> (/Users/vponnap2/.nvm/versions/node/v4.3.2/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:252:14)
+36 verbose stack     at Request._callback (/Users/vponnap2/.nvm/versions/node/v4.3.2/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:172:14)
+36 verbose stack     at Request.self.callback (/Users/vponnap2/.nvm/versions/node/v4.3.2/lib/node_modules/npm/node_modules/request/request.js:198:22)
+36 verbose stack     at emitTwo (events.js:87:13)
+36 verbose stack     at Request.emit (events.js:172:7)
+36 verbose stack     at Request.<anonymous> (/Users/vponnap2/.nvm/versions/node/v4.3.2/lib/node_modules/npm/node_modules/request/request.js:1082:10)
+36 verbose stack     at emitOne (events.js:82:20)
+36 verbose stack     at Request.emit (events.js:169:7)
+36 verbose stack     at IncomingMessage.<anonymous> (/Users/vponnap2/.nvm/versions/node/v4.3.2/lib/node_modules/npm/node_modules/request/request.js:1009:12)
+37 verbose statusCode 403
+38 verbose pkgid generator-aws-microservice
+39 verbose cwd /Users/vponnap2/projects/wysknd/generator-aws-microservice
+40 error Darwin 15.6.0
+41 error argv "/Users/vponnap2/.nvm/versions/node/v4.3.2/bin/node" "/Users/vponnap2/.nvm/versions/node/v4.3.2/bin/npm" "publish"
+42 error node v4.3.2
+43 error npm  v2.14.12
+44 error code E403
+45 error "You cannot publish over the previously published version 0.0.4." : generator-aws-microservice
+46 error If you need help, you may report this error at:
+46 error     <https://github.com/npm/npm/issues>
+47 verbose exit [ 1, true ]
