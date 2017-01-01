@@ -12,7 +12,7 @@ _loggerProvider.enableMock();
 
 const _rewire = require('rewire');
 const _testHelper = require('wysknd-test');
-const LambdaWrapper = _testHelper.AwsLambdaWrapper;
+const LambdaWrapper = _testHelper.aws.LambdaWrapper;
 const _testValueProvider = _testHelper.testValueProvider;
 const _testUtils = _testHelper.utils;
 
