@@ -1,14 +1,26 @@
 {
-    "test/integration/*-spec.js": {
+    "test/e2e/*-spec.js": {
         "alternate": "src/{}.js",
-        "type": "integration-test"
+        "type": "e2e"
     },
     "test/unit/*-spec.js": {
         "alternate": "src/{}.js",
-        "type": "unit-test"
+        "type": "unit"
     },
     "src/*.js": {
         "alternate": "test/unit/{}-spec.js",
         "type": "src"
+    },
+    "src/data/*-data-access.js": {
+        "alternate": "test/unit/data/{}-data-access-spec.js",
+        "type": "data"
+    },
+    "src/handlers/*-handler.js": {
+        "alternate": "test/unit/handlers/{}-handler-spec.js",
+        "type": "handler"
+    },
+    "src/schema/*-schema.json": {
+        "alternate": "test/unit/handlers/{}-handler-spec.js",
+        "type": "schema"
     }
 }
