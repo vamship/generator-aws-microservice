@@ -28,7 +28,7 @@
     "grunt-esformatter": "^1.2.0",
     "grunt-eslint": "^19.0.0",
     "grunt-mocha-istanbul": "^5.0.1",
-    "grunt-wysknd-aws-cf-generator": "^1.0.0",
+    "grunt-wysknd-aws-cf-generator": "^2.1.0",
     "istanbul": "^0.4.4",
     "load-grunt-tasks": "^3.5.0",
     "mocha": "^3.0.2",
@@ -36,7 +36,7 @@
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
     "time-grunt": "^1.4.0",
-    "wysknd-aws-cf-generator": "^1.1.0",
+    "wysknd-aws-cf-generator": "^2.1.0",
     "wysknd-lib": "0.0.2",
     "wysknd-log": "0.0.4",
     "wysknd-test": "^3.1.0"
