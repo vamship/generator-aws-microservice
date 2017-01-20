@@ -130,12 +130,6 @@ module.exports = _yeoman.Base.extend({
     */
     gatherTableInfo: function () {
         const prompts = [{
-            type: 'checkbox',
-            name: 'tableTargetEnvironments',
-            message: 'Select target environments',
-            choices: [ 'dev', 'prod' ],
-            default: [ 'dev', 'prod' ]
-        }, {
             type: 'input',
             name: 'tableName',
             message: 'Table name?',

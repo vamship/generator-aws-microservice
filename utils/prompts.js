@@ -15,7 +15,8 @@ module.exports = {
         const properties = [
             'projectName',
             'projectPrefix',
-            'projectDescription'
+            'projectDescription',
+            'projectTargetEnvironments'
         ];
         const config = {};
         properties.forEach((propName) => {
@@ -50,6 +51,16 @@ module.exports = {
                 message: 'Project prefix?',
                 default: answers => config.projectPrefix ||
                             answers.projectName || config.projectName
+            });
+        }
+
+        if(!config.projectTargetEnvironments || force) {
+            prompts.push({
+                type: 'checkbox',
+                name: 'projectTargetEnvironments',
+                message: 'Select target environments',
+                choices: [ 'dev', 'qa', 'prod' ],
+                default: [ 'dev', 'qa', 'prod' ]
             });
         }
 

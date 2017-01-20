@@ -20,8 +20,8 @@ const LocalSecondaryIndex = DynamoDbTemplates.LocalSecondaryIndex;
  */
 module.exports = (dirInfo) => {
     const environments = [
-<% tableTargetEnvironments.forEach((env, index) => { -%>
-        '<%= env %>'<%= (index<tableTargetEnvironments.length -1)? ',':'' %>
+<% projectTargetEnvironments.forEach((env, index) => { -%>
+        '<%= env %>'<%= (index < projectTargetEnvironments.length -1)? ',':'' %>
 <% }) -%>
     ];
 
