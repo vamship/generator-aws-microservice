@@ -19,11 +19,7 @@ const LocalSecondaryIndex = DynamoDbTemplates.LocalSecondaryIndex;
  * Returns the table definition for the <%= tableName %> table.
  */
 module.exports = (dirInfo) => {
-    const environments = [
-<% projectTargetEnvironments.forEach((env, index) => { -%>
-        '<%= env %>'<%= (index < projectTargetEnvironments.length -1)? ',':'' %>
-<% }) -%>
-    ];
+    const environments = [<%- projectTargetEnvironments.map(item => `'${item}'`).join(',') %>];
 
     return environments.map((envName) => {
         const env = new Environment(envName);
