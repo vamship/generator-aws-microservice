@@ -24,8 +24,8 @@ module.exports = (dirInfo) => {
     return environments.map((envName) => {
         const env = new Environment(envName);
         const tableName = env.getSuffixString('<%= projectPrefix %>.<%= tableName %>');
-        const key = dirInfo.getNamespacedToken('dynamodb_table', tableName);
-        return (new TableTemplate(key, tableName))
+        const tableKey = dirInfo.getNamespacedToken('dynamodb_table', tableName);
+        return (new TableTemplate(tableKey, tableName))
             .addKey('<%= tableHashKey %>', '<%= tableHashKeyType %>', 'HASH')
 <% if(typeof tableRangeKey === 'string' && tableRangeKey.length > 0) { -%>
             .addKey('<%= tableRangeKey %>', '<%= tableRangeKeyType %>', 'RANGE')
