@@ -60,7 +60,7 @@ const HELP_TEXT =
 '                                                                                \n' +
 '  cf:[dev|qa|prod|   : Allows create, update, delete or display status on a     \n' +
 '      common]:         cloud formation script associated with a specific        \n' +
-'      [create|update|  deployment stack. The fist target identifies the stack   \n' +
+'      [create|update|  stack environment. The fist target identifies the stack  \n' +
 '        delete|status] (dev/qa/prod/common), while the second target specifies  \n' +
 '                       the action to take (create/update/delete/status).        \n' +
 '                                                                                \n' +
@@ -149,8 +149,8 @@ module.exports = function(grunt) {
     const AWS_STACK_NAME = `${ENV.appName}-stack`;
     const AWS_BUCKET = `${ENV.appName}`;
     const CF_TEMPLATE_DIR = 'cf-templates';
-    const _getTemplateName = (deployStack) => {
-        return `${ENV.appName}-${deployStack}-template.json`;
+    const _getTemplateName = (stackEnv) => {
+        return `${ENV.appName}-${stackEnv}-template.json`;
     };
 
     /* ------------------------------------------------------------------------
@@ -418,12 +418,12 @@ module.exports = function(grunt) {
      */
     grunt.registerTask('cf',
         'Enables create, update, delete or status check on the cloud formation stack for the specified deployment environment',
-        function(deployStack, action) {
-            deployStack = deployStack || 'common';
+        function(stackEnv, action) {
+            stackEnv = stackEnv || 'common';
             action = action || 'update';
-            grunt.log.writeln(`Executing cloudformation action [${action}] for stack [${deployStack}]`);
-            if(DEPLOY_STACKS.indexOf(deployStack) < 0) {
-                grunt.log.error(`Invalid deployment stack specified: [${deployStack}]`);
+            grunt.log.writeln(`Executing cloudformation action [${action}] for stack [${stackEnv}]`);
+            if(DEPLOY_STACKS.indexOf(stackEnv) < 0) {
+                grunt.log.error(`Invalid stack environment specified: [${stackEnv}]`);
                 return;
             }
             if(['update', 'create', 'delete', 'status'].indexOf(action) < 0) {
@@ -431,9 +431,9 @@ module.exports = function(grunt) {
                 return;
             }
             if(['update', 'create'].indexOf(action) >= 0) {
-                const templateName = _getTemplateName(deployStack);
+                const templateName = _getTemplateName(stackEnv);
                 grunt.log.debug('Generating cloudformation template and uploading to s3');
-                grunt.task.run(`generate_cf_template:${deployStack}`);
+                grunt.task.run(`generate_cf_template:${stackEnv}`);
 
                 grunt.config.set(`aws_s3.uploadCf.src`, templateName);
                 grunt.task.run('aws_s3:uploadCf');
@@ -450,16 +450,16 @@ module.exports = function(grunt) {
      */
     grunt.registerTask('deploy',
         'Prepares a package of the lambda functions, and deploys them all to the specified environment',
-         function(deployStack) {
-            if(deployStack !== 'prod') {
-                deployStack = 'dev';
+         function(stackEnv) {
+            if(stackEnv !== 'prod') {
+                stackEnv = 'dev';
             }
-            if(DEPLOY_STACKS.indexOf(deployStack) < 0) {
-                grunt.log.error(`Invalid deployment stack specified: [${deployStack}]`);
+            if(DEPLOY_STACKS.indexOf(stackEnv) < 0) {
+                grunt.log.error(`Invalid stack environment specified: [${stackEnv}]`);
                 return;
             }
             grunt.task.run('package');
-            grunt.task.run(`deploy_lambdas:${deployStack}`);
+            grunt.task.run(`deploy_lambdas:${stackEnv}`);
          }
     );
 
