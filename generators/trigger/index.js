@@ -32,7 +32,7 @@ module.exports = _yeoman.Base.extend({
      */
     lookupAvailableSources: function() {
         const done = this.async();
-        const path = this.destinationPath('resources/cf/dynamodb');
+        const path = this.destinationPath('resources/dev/dynamodb');
         _fs.readdir(path, (err, data) => {
             if(!err) {
                 this.availableSources = data.map((item) => {
@@ -134,11 +134,15 @@ module.exports = _yeoman.Base.extend({
      * Creates cloud formation template for the trigger
      */
     createTriggerTemplate: function() {
-        this.fs.copyTpl(
-            this.templatePath(`resources/cf/lambda/trigger.js`),
-            this.destinationPath(`resources/cf/lambda/${this.props.triggerTemplateFile}.js`),
-            this.props
-        );
+        this.props.projectTargetEnvironments.forEach((envStr) => {
+            const props = Object.assign({}, this.props, {
+                envStr: envStr
+            });
+            this.fs.copyTpl(
+                this.templatePath(`resources/_cf/lambda/trigger.js`),
+                this.destinationPath(`resources/${envStr}/lambda/${this.props.triggerTemplateFile}.js`),
+                props
+            );
+        });
     }
-
 });
