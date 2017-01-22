@@ -20,7 +20,6 @@ module.exports = (dirInfo) => {
     const tableKey = dirInfo.getNamespacedToken('dynamodb_table', tableName);
 
     const functionName = '<%= triggerLambdaFunction %>';
-    const functionKey = dirInfo.getNamespacedToken('lambda_function', functionName);
 
     const alias = envStr;
 
@@ -30,6 +29,5 @@ module.exports = (dirInfo) => {
         .setStartingPosition('<%= triggerStartPosition %>')
         .setDynamoDbSourceByResource(tableKey)
         .setFunction(functionName, alias)
-        .addDependency(tableKey)
-        .addDependency(functionKey);
+        .addDependency(tableKey);
 };
