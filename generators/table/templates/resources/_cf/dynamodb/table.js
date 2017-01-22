@@ -22,8 +22,10 @@ const LocalSecondaryIndex = DynamoDbTemplates.LocalSecondaryIndex;
 module.exports = (dirInfo) => {
     const envStr = '<%= envStr %>';
     const env = new Environment(envStr);
+
     const tableName = env.getSuffixString('<%= projectPrefix %>.<%= tableName %>');
     const tableKey = dirInfo.getNamespacedToken('dynamodb_table', tableName);
+
     return (new TableTemplate(tableKey, tableName))
         .addKey('<%= tableHashKey %>', '<%= tableHashKeyType %>', 'HASH')
 <% if(typeof tableRangeKey === 'string' && tableRangeKey.length > 0) { -%>
