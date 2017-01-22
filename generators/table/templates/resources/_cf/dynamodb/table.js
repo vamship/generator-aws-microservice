@@ -31,6 +31,9 @@ module.exports = (dirInfo) => {
 <% if(typeof tableRangeKey === 'string' && tableRangeKey.length > 0) { -%>
         .addKey('<%= tableRangeKey %>', '<%= tableRangeKeyType %>', 'RANGE')
 <% } -%>
+<% if(typeof tableStreamViewType === 'string' && tableStreamViewType !== 'NONE') { -%>
+        .setStreamSpecification('<%= tableStreamViewType %>')
+<% } -%>
         .setReadCapacity(<%= tableReadCapacity %>)
         .setWriteCapacity(<%= tableWriteCapacity %>)<%= (indexNames.length > 0)? '\n':';\n' -%>
 <%

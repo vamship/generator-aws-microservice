@@ -166,6 +166,12 @@ module.exports = _yeoman.Base.extend({
             message: 'Table range key type?',
             default: 'S',
             when: (answers) => !!answers.tableRangeKey
+        }, {
+            type: 'list',
+            choices: ['NONE', 'KEYS_ONLY', 'NEW_IMAGE', 'OLD_IMAGE', 'NEW_AND_OLD_IMAGES'],
+            name: 'tableStreamViewType',
+            message: 'Streaming data type (event triggers)?',
+            default: 'NONE'
         }];
 
         return _prompts.getProjectInfo(this, false)
