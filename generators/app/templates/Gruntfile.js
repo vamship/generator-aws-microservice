@@ -147,8 +147,8 @@ module.exports = function(grunt) {
 
     // Cloud formation options
     const AWS_STACK_NAME = `${ENV.appName}-stack`;
-    const AWS_BUCKET = `${ENV.appName}`;
-    const CF_TEMPLATE_DIR = 'cf-templates';
+    const AWS_S3__BUCKET = `${ENV.appName}`;
+    const AWS_S3_CF_TEMPLATE_DIR = 'cf-templates';
     const _getTemplateName = (stackEnv) => {
         return `${ENV.appName}-${stackEnv}-template.json`;
     };
@@ -345,14 +345,14 @@ module.exports = function(grunt) {
         aws_s3: {
             options: {
                 awsProfile: AWS_PROFILE,
-                bucket: AWS_BUCKET,
+                bucket: AWS_S3_BUCKET,
                 region: AWS_REGION
             },
             uploadCf: {
                 action: 'upload',
                 expand: true,
                 cwd: DIST.getPath(),
-                dest: CF_TEMPLATE_DIR,
+                dest: AWS_S3_CF_TEMPLATE_DIR,
                 differential: true
             }
         },
@@ -439,7 +439,7 @@ module.exports = function(grunt) {
                 grunt.task.run('aws_s3:uploadCf');
 
                 grunt.config.set(`cloudformation.${action}.templateUrl`,
-                    `https://s3.amazonaws.com/${AWS_BUCKET}/${CF_TEMPLATE_DIR}/${templateName}`);
+                    `https://s3.amazonaws.com/${AWS_S3_BUCKET}/${AWS_S3_CF_TEMPLATE_DIR}/${templateName}`);
             }
             grunt.task.run(`cloudformation:${action}`);
         }
