@@ -146,9 +146,11 @@ module.exports = function(grunt) {
     const RESOURCES = ENV.ROOT.resources;
 
     // Cloud formation options
-    const AWS_STACK_NAME = `${ENV.appName}-stack`;
-    const AWS_S3__BUCKET = `${ENV.appName}`;
+    const AWS_S3_BUCKET = `${ENV.appName}`;
     const AWS_S3_CF_TEMPLATE_DIR = 'cf-templates';
+    const _getStackName = (stackEnv) => {
+        return `${ENV.appName}-${stackEnv}-stack`;
+    };
     const _getTemplateName = (stackEnv) => {
         return `${ENV.appName}-${stackEnv}-template.json`;
     };
@@ -364,7 +366,6 @@ module.exports = function(grunt) {
          */
         cloudformation: {
             options: {
-                stackName: AWS_STACK_NAME,
                 region: AWS_REGION,
                 profile: AWS_PROFILE,
                 capabilities: [ 'CAPABILITY_NAMED_IAM' ]
@@ -441,6 +442,7 @@ module.exports = function(grunt) {
                 grunt.config.set(`cloudformation.${action}.templateUrl`,
                     `https://s3.amazonaws.com/${AWS_S3_BUCKET}/${AWS_S3_CF_TEMPLATE_DIR}/${templateName}`);
             }
+            grunt.config.set('cloudformation.options.stackName', _getStackName(stackEnv));
             grunt.task.run(`cloudformation:${action}`);
         }
     );
