@@ -4,6 +4,7 @@ const _folder = require('wysknd-lib').folder;
 const _utils = require('wysknd-lib').utils;
 const _lambdaConfig = require('./src/lambda-config.json');
 const _awsSdk = require('aws-sdk');
+const DEPLOY_STACKS = ['dev', 'qa', 'prod', 'common'];
 
 // Need to set project specific options here.
 const AWS_PROFILE = '<%= awsProfile %>';
@@ -57,10 +58,11 @@ const HELP_TEXT =
 '                       and minor version numbers can be incremented by          \n' +
 '                       specifying the "major" or "minor" subtask.               \n' +
 '                                                                                \n' +
-'  cf:[create|update| : Allows create, update, delete or display status on a     \n' +
-'      delete|status]   cloud formation script associated with the project. Uses \n' +
-'                       wysknd-aws-cf-generator to generate cloud formation      \n' +
-'                       scripts.                                                 \n' +
+'  cf:[dev|qa|prod|   : Allows create, update, delete or display status on a     \n' +
+'      common]:         cloud formation script associated with a specific        \n' +
+'      [create|update|  deployment stack. The fist target identifies the stack   \n' +
+'        delete|status] (dev/qa/prod/common), while the second target specifies  \n' +
+'                       the action to take (create/update/delete/status).        \n' +
 '                                                                                \n' +
 '  package            : Packages all lambda functions, and creates a package     \n' +
 '                       file for deployment.                                     \n' +
@@ -147,7 +149,9 @@ module.exports = function(grunt) {
     const AWS_STACK_NAME = `${ENV.appName}-stack`;
     const AWS_BUCKET = `${ENV.appName}`;
     const CF_TEMPLATE_DIR = 'cf-templates';
-    const CF_TEMPLATE_NAME = `${ENV.appName}-template.json`;
+    const _getTemplateName = (deployStack) => {
+        return `${ENV.appName}-${deployStack}-template.json`;
+    };
 
     /* ------------------------------------------------------------------------
      * Grunt task configuration
@@ -285,17 +289,50 @@ module.exports = function(grunt) {
          */
         generate_cf_template: {
             options: {
-                description: 'AWS resources for project: <%= projectName %>',
                 tokens: {
                     lambda_execute_role: `$REGION.${ENV.appName}.lambda_role`
                 },
                 output: {
-                    dir: DIST.getPath(),
-                    fileName: CF_TEMPLATE_NAME
+                    dir: DIST.getPath()
                 },
                 input: {
                     rootDir: RESOURCES.getPath(),
-                    templateDir: 'cf'
+                }
+            },
+            common: {
+                description: 'Common resources for project: <%= projectName %>',
+                output: {
+                    fileName: _getTemplateName('common')
+                },
+                input: {
+                    templateDir: 'common'
+                }
+            },
+            dev: {
+                description: 'Development stack resources for project: <%= projectName %>',
+                output: {
+                    fileName: _getTemplateName('dev')
+                },
+                input: {
+                    templateDir: 'dev'
+                }
+            },
+            qa: {
+                description: 'QA stack resources for project: <%= projectName %>',
+                output: {
+                    fileName: _getTemplateName('qa')
+                },
+                input: {
+                    templateDir: 'qa'
+                }
+            },
+            prod: {
+                description: 'PRODUCTION stack resources for project: <%= projectName %>',
+                output: {
+                    fileName: _getTemplateName('prod')
+                },
+                input: {
+                    templateDir: 'prod'
                 }
             }
         },
@@ -316,15 +353,6 @@ module.exports = function(grunt) {
                 expand: true,
                 cwd: DIST.getPath(),
                 dest: CF_TEMPLATE_DIR,
-                src: CF_TEMPLATE_NAME,
-                differential: true
-            },
-            uploadLambda: {
-                action: 'upload',
-                expand: true,
-                cwd: DIST.getPath(),
-                dest: CF_TEMPLATE_DIR,
-                src: CF_TEMPLATE_NAME,
                 differential: true
             }
         },
@@ -345,12 +373,10 @@ module.exports = function(grunt) {
                 action: 'stack-status'
             },
             create: {
-                action: 'create-stack',
-                templateUrl: `https://s3.amazonaws.com/${AWS_BUCKET}/${CF_TEMPLATE_DIR}/${CF_TEMPLATE_NAME}`
+                action: 'create-stack'
             },
             update: {
-                action: 'update-stack',
-                templateUrl: `https://s3.amazonaws.com/${AWS_BUCKET}/${CF_TEMPLATE_DIR}/${CF_TEMPLATE_NAME}`
+                action: 'update-stack'
             },
             delete: {
                 action: 'delete-stack'
@@ -391,18 +417,31 @@ module.exports = function(grunt) {
      * stack associated with the project.
      */
     grunt.registerTask('cf',
-        'Enables create, update, delete or status check on a cloud formation stack associated with the project',
-        function(target) {
-            target = target || 'update';
-            if(['update', 'create', 'delete', 'status'].indexOf(target) < 0) {
-                grunt.log.error(`Invalid target specified: [${target}]`);
+        'Enables create, update, delete or status check on the cloud formation stack for the specified deployment environment',
+        function(deployStack, action) {
+            deployStack = deployStack || 'common';
+            action = action || 'update';
+            grunt.log.writeln(`Executing cloudformation action [${action}] for stack [${deployStack}]`);
+            if(DEPLOY_STACKS.indexOf(deployStack) < 0) {
+                grunt.log.error(`Invalid deployment stack specified: [${deployStack}]`);
                 return;
             }
-            if(['update', 'create'].indexOf(target) >= 0) {
-                grunt.task.run('generate_cf_template');
-                grunt.task.run('aws_s3:uploadCf');
+            if(['update', 'create', 'delete', 'status'].indexOf(action) < 0) {
+                grunt.log.error(`Invalid action specified: [${action}]`);
+                return;
             }
-            grunt.task.run(`cloudformation:${target}`);
+            if(['update', 'create'].indexOf(action) >= 0) {
+                const templateName = _getTemplateName(deployStack);
+                grunt.log.debug('Generating cloudformation template and uploading to s3');
+                grunt.task.run(`generate_cf_template:${deployStack}`);
+
+                grunt.config.set(`aws_s3.uploadCf.src`, templateName);
+                grunt.task.run('aws_s3:uploadCf');
+
+                grunt.config.set(`cloudformation.${action}.templateUrl`,
+                    `https://s3.amazonaws.com/${AWS_BUCKET}/${CF_TEMPLATE_DIR}/${templateName}`);
+            }
+            grunt.task.run(`cloudformation:${action}`);
         }
     );
 
@@ -411,12 +450,16 @@ module.exports = function(grunt) {
      */
     grunt.registerTask('deploy',
         'Prepares a package of the lambda functions, and deploys them all to the specified environment',
-         function(target) {
-            if(target !== 'prod') {
-                target = 'dev';
+         function(deployStack) {
+            if(deployStack !== 'prod') {
+                deployStack = 'dev';
+            }
+            if(DEPLOY_STACKS.indexOf(deployStack) < 0) {
+                grunt.log.error(`Invalid deployment stack specified: [${deployStack}]`);
+                return;
             }
             grunt.task.run('package');
-            grunt.task.run(`deploy_lambdas:${target}`);
+            grunt.task.run(`deploy_lambdas:${deployStack}`);
          }
     );
 
