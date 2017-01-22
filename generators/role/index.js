@@ -89,8 +89,8 @@ module.exports = _yeoman.Base.extend({
      */
     createRoleTemplate: function() {
         this.fs.copyTpl(
-            this.templatePath(`resources/cf/iam/lambda-role.js`),
-            this.destinationPath(`resources/cf/iam/${this.props.roleTemplateFile}.js`),
+            this.templatePath(`resources/common/iam/lambda-role.js`),
+            this.destinationPath(`resources/common/iam/${this.props.roleTemplateFile}.js`),
             this.props
         );
     }

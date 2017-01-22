@@ -38,7 +38,7 @@ module.exports = _yeoman.Base.extend({
             'config/dev.json',
             'config/prod.json',
             'config/custom-environment-variables.json',
-            'resources/cf/lambda/lambda-functions.js',
+            'resources/common/lambda/lambda-functions.js',
             'src/lambda-config.json',
             'src/index.js',
             'test/unit/index-spec.js'
