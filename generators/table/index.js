@@ -214,10 +214,15 @@ module.exports = _yeoman.Base.extend({
      * Creates cloud formation template for the dynamo db table.
      */
     createTableTemplate: function() {
-        this.fs.copyTpl(
-            this.templatePath(`resources/cf/dynamodb/table.js`),
-            this.destinationPath(`resources/cf/dynamodb/${this.props.tableTemplateFile}.js`),
-            this.props
-        );
+        this.props.projectTargetEnvironments.forEach((envStr) => {
+            const props = Object.assign({}, this.props, {
+                envStr: envStr
+            });
+            this.fs.copyTpl(
+                this.templatePath(`resources/_cf/dynamodb/table.js`),
+                this.destinationPath(`resources/${envStr}/dynamodb/${this.props.tableTemplateFile}.js`),
+                props
+            );
+        });
     }
 });
