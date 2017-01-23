@@ -58,11 +58,11 @@ const HELP_TEXT =
 '                       and minor version numbers can be incremented by          \n' +
 '                       specifying the "major" or "minor" subtask.               \n' +
 '                                                                                \n' +
-'  cf:[dev|qa|prod|   : Allows create, update, delete or display status on a     \n' +
+'  cf:[dev|qa|prod|   : Generates, creates, updates, deletes or shows status on a\n' +
 '      common]:         cloud formation script associated with a specific        \n' +
-'      [create|update|  stack environment. The fist target identifies the stack  \n' +
-'        delete|status] (dev/qa/prod/common), while the second target specifies  \n' +
-'                       the action to take (create/update/delete/status).        \n' +
+'      [generate|       stack environment. The first target identifies the stack \n' +
+'        create|update| (dev/qa/prod/common), while the second target specifies  \n' +
+'        delete|status] the action to take (generate/create/update/delete/status)\n' +
 '                                                                                \n' +
 '  package            : Packages all lambda functions, and creates a package     \n' +
 '                       file for deployment.                                     \n' +
@@ -427,23 +427,30 @@ module.exports = function(grunt) {
                 grunt.log.error(`Invalid stack environment specified: [${stackEnv}]`);
                 return;
             }
-            if(['update', 'create', 'delete', 'status'].indexOf(action) < 0) {
+            if(['update', 'create', 'delete', 'status', 'generate'].indexOf(action) < 0) {
                 grunt.log.error(`Invalid action specified: [${action}]`);
                 return;
             }
-            if(['update', 'create'].indexOf(action) >= 0) {
+
+            if(['update', 'create', 'generate'].indexOf(action) >= 0) {
                 const templateName = _getTemplateName(stackEnv);
                 grunt.log.debug('Generating cloudformation template and uploading to s3');
                 grunt.task.run(`generate_cf_template:${stackEnv}`);
 
-                grunt.config.set(`aws_s3.uploadCf.src`, templateName);
-                grunt.task.run('aws_s3:uploadCf');
+                if(['update', 'create'].indexOf(action) >= 0) {
+                    grunt.config.set(`aws_s3.uploadCf.src`, templateName);
+                    grunt.task.run('aws_s3:uploadCf');
 
-                grunt.config.set(`cloudformation.${action}.templateUrl`,
-                    `https://s3.amazonaws.com/${AWS_S3_BUCKET}/${AWS_S3_CF_TEMPLATE_DIR}/${templateName}`);
+                    grunt.config.set(`cloudformation.${action}.templateUrl`,
+                        `https://s3.amazonaws.com/${AWS_S3_BUCKET}/${AWS_S3_CF_TEMPLATE_DIR}/${templateName}`);
+                }
             }
-            grunt.config.set('cloudformation.options.stackName', _getStackName(stackEnv));
-            grunt.task.run(`cloudformation:${action}`);
+
+
+            if(action !== 'generate') {
+                grunt.config.set('cloudformation.options.stackName', _getStackName(stackEnv));
+                grunt.task.run(`cloudformation:${action}`);
+            }
         }
     );
 
