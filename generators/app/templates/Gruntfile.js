@@ -292,7 +292,7 @@ module.exports = function(grunt) {
         generate_cf_template: {
             options: {
                 tokens: {
-                    lambda_execute_role: `$REGION.${ENV.appName}.lambda_role`
+                    lambda_execute_role: '$REGION.<%= projectPrefix %>.lambda_role'
                 },
                 output: {
                     dir: DIST.getPath()
