@@ -15,6 +15,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-as-promised": "^5.3.0",
+    "esformatter-ignore": "^0.1.3",
     "esformatter-remove-trailing-commas": "^1.0.1",
     "grunt": "^1.0.1",
     "grunt-aws-cloudformation": "^0.1.0",

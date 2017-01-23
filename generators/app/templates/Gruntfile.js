@@ -13,6 +13,7 @@ const AWS_REGION = '<%= awsRegion %>';
 // -------------------------------------------------------------------------------
 //  Help documentation
 // -------------------------------------------------------------------------------
+/*esfmt-ignore-start*/
 const HELP_TEXT =
 '--------------------------------------------------------------------------------\n' +
 ' Defines tasks that are commonly used during the development process. This      \n' +
@@ -87,6 +88,8 @@ const HELP_TEXT =
 '            during the dev/build process.                                       \n' +
 '                                                                                \n' +
 '--------------------------------------------------------------------------------';
+/*esfmt-ignore-end*/
+
 module.exports = function(grunt) {
     /* ------------------------------------------------------------------------
      * Initialization of dependencies.
@@ -105,6 +108,7 @@ module.exports = function(grunt) {
     const ENV = {
         appName: packageConfig.name || '__UNKNOWN__',
         appVersion: packageConfig.version || '__UNKNOWN__',
+    /*esfmt-ignore-start*/
         tree: {                             /* ------------------------------ */
                                             /* <ROOT>                         */
             'src': null,                    /*  |--- src                      */
@@ -121,17 +125,18 @@ module.exports = function(grunt) {
             'dist': null,                   /*  |--- dist                     */
             'coverage': null                /*  |--- coverage                 */
         }                                   /* ------------------------------ */
+    /*esfmt-ignore-end*/
     };
 
     ENV.ROOT = _folder.createFolderTree('./', ENV.tree);
 
     (function _createTreeRefs(parent, subTree) {
-        for(let folder in subTree) {
+        for (let folder in subTree) {
             const folderName = folder.replace('.', '_');
             parent[folderName] = parent.getSubFolder(folder);
 
             const children = subTree[folder];
-            if(typeof children === 'object') {
+            if (typeof children === 'object') {
                 _createTreeRefs(parent[folder], children);
             }
         }
@@ -165,7 +170,7 @@ module.exports = function(grunt) {
          */
         copy: {
             compile: {
-                files: [ {
+                files: [{
                     expand: true,
                     cwd: SRC.getPath(),
                     src: ['**'],
@@ -173,14 +178,14 @@ module.exports = function(grunt) {
                 }, {
                     expand: true,
                     cwd: ENV.ROOT.getPath(),
-                    src: [ CONFIG.allFilesPattern('*') ],
+                    src: [CONFIG.allFilesPattern('*')],
                     dest: WORKING.getPath()
                 }, {
                     expand: false,
                     cwd: ENV.ROOT.getPath(),
                     src: ['package.json'],
                     dest: WORKING.getPath()
-                } ]
+                }]
             }
         },
 
@@ -189,9 +194,9 @@ module.exports = function(grunt) {
          *  - Remove temporary files and folders.
          */
         clean: {
-            coverage: [ ENV.ROOT.coverage.getPath() ],
-            working: [ WORKING.getPath() ],
-            dist: [ DIST.getPath() ]
+            coverage: [ENV.ROOT.coverage.getPath()],
+            working: [WORKING.getPath()],
+            dist: [DIST.getPath()]
         },
 
         /**
@@ -200,12 +205,12 @@ module.exports = function(grunt) {
          */
         mocha_istanbul: {
             options: {
-                reportFormats: [ 'text', 'html' ],
+                reportFormats: ['text', 'html'],
                 reporter: 'spec',
                 colors: true
             },
-            unit: [ TEST.unit.allFilesPattern('js') ],
-            e2e: [ TEST.e2e.allFilesPattern('js') ]
+            unit: [TEST.unit.allFilesPattern('js')],
+            e2e: [TEST.e2e.allFilesPattern('js')]
         },
 
         /**
@@ -232,7 +237,7 @@ module.exports = function(grunt) {
                     aliases: '',
                     enableVersioning: true
                 },
-                arn : ''
+                arn: ''
             }
         },
 
@@ -241,7 +246,13 @@ module.exports = function(grunt) {
          *  - Format javascript source code
          */
         esformatter: {
+            options: {
+                plugins: [
+                    'esformatter-ignore'
+                ]
+            },
             src: [
+                'Gruntfile.js',
                 SRC.allFilesPattern('js'),
                 RESOURCES.cf.allFilesPattern('js'),
                 TEST.allFilesPattern('js')
@@ -268,8 +279,8 @@ module.exports = function(grunt) {
          */
         watch: {
             allSources: {
-                files: [ SRC.allFilesPattern(), TEST.allFilesPattern() ],
-                tasks: [ ]
+                files: [SRC.allFilesPattern(), TEST.allFilesPattern()],
+                tasks: []
             }
         },
 
@@ -280,7 +291,7 @@ module.exports = function(grunt) {
         bump: {
             options: {
                 push: false
-             }
+            }
         },
 
         /**
@@ -367,7 +378,7 @@ module.exports = function(grunt) {
             options: {
                 region: AWS_REGION,
                 profile: AWS_PROFILE,
-                capabilities: [ 'CAPABILITY_NAMED_IAM' ]
+                capabilities: ['CAPABILITY_NAMED_IAM']
             },
             status: {
                 action: 'stack-status'
@@ -396,21 +407,23 @@ module.exports = function(grunt) {
      *  - Testing build artifacts
      *  - Cleaning up build results
      */
-    grunt.registerTask('default', [ 'format',
-                                    'lint',
-                                    'test:unit',
-                                    'clean' ]);
+    grunt.registerTask('default', [
+        'format',
+        'lint',
+        'test:unit',
+        'clean']);
 
     /**
      * Create distribution package task. Creates a new distribution of the app,
      * ready for deployment.
      */
-    grunt.registerTask('package', ['format',
-                                 'lint',
-                                 'build',
-                                 'test:unit',
-                                 'lambda_package',
-                                 'clean:working' ]);
+    grunt.registerTask('package', [
+        'format',
+        'lint',
+        'build',
+        'test:unit',
+        'lambda_package',
+        'clean:working']);
 
     /**
      * Create, update, delete or show status of the cloud formation resource
@@ -422,21 +435,21 @@ module.exports = function(grunt) {
             stackEnv = stackEnv || 'common';
             action = action || 'update';
             grunt.log.writeln(`Executing cloudformation action [${action}] for stack [${stackEnv}]`);
-            if(DEPLOY_STACKS.indexOf(stackEnv) < 0) {
+            if (DEPLOY_STACKS.indexOf(stackEnv) < 0) {
                 grunt.log.error(`Invalid stack environment specified: [${stackEnv}]`);
                 return;
             }
-            if(['update', 'create', 'delete', 'status', 'generate'].indexOf(action) < 0) {
+            if (['update', 'create', 'delete', 'status', 'generate'].indexOf(action) < 0) {
                 grunt.log.error(`Invalid action specified: [${action}]`);
                 return;
             }
 
-            if(['update', 'create', 'generate'].indexOf(action) >= 0) {
+            if (['update', 'create', 'generate'].indexOf(action) >= 0) {
                 const templateName = _getTemplateName(stackEnv);
                 grunt.log.debug('Generating cloudformation template and uploading to s3');
                 grunt.task.run(`generate_cf_template:${stackEnv}`);
 
-                if(['update', 'create'].indexOf(action) >= 0) {
+                if (['update', 'create'].indexOf(action) >= 0) {
                     grunt.config.set(`aws_s3.uploadCf.src`, templateName);
                     grunt.task.run('aws_s3:uploadCf');
 
@@ -446,7 +459,7 @@ module.exports = function(grunt) {
             }
 
 
-            if(action !== 'generate') {
+            if (action !== 'generate') {
                 grunt.config.set('cloudformation.options.stackName', _getStackName(stackEnv));
                 grunt.task.run(`cloudformation:${action}`);
             }
@@ -458,17 +471,17 @@ module.exports = function(grunt) {
      */
     grunt.registerTask('deploy',
         'Prepares a package of the lambda functions, and deploys them all to the specified environment',
-         function(stackEnv) {
-            if(stackEnv !== 'prod') {
+        function(stackEnv) {
+            if (stackEnv !== 'prod') {
                 stackEnv = 'dev';
             }
-            if(DEPLOY_STACKS.indexOf(stackEnv) < 0) {
+            if (DEPLOY_STACKS.indexOf(stackEnv) < 0) {
                 grunt.log.error(`Invalid stack environment specified: [${stackEnv}]`);
                 return;
             }
             grunt.task.run('package');
             grunt.task.run(`deploy_lambdas:${stackEnv}`);
-         }
+        }
     );
 
     /**
@@ -496,17 +509,17 @@ module.exports = function(grunt) {
     grunt.registerTask('deploy_lambdas',
         'Deploys all defined lambda functions in the project',
         function(target, packageName) {
-            if(target !== 'prod') {
+            if (target !== 'prod') {
                 target = 'dev';
             }
-            if(typeof packageName !== 'string' || packageName.length <= 0) {
+            if (typeof packageName !== 'string' || packageName.length <= 0) {
                 // Use the package name set by the default packaging task.
                 packageName = grunt.config.get('lambda_deploy.default.package');
             }
 
             let functionNameFilter = grunt.option('lambda-function');
-            if(typeof functionNameFilter !== 'string' ||
-               functionNameFilter.length < 0)  {
+            if (typeof functionNameFilter !== 'string' ||
+                functionNameFilter.length < 0) {
                 functionNameFilter = '.*';
             } else {
                 grunt.log.writeln(`Filtering lambdas using regex pattern: [${functionNameFilter}]`);
@@ -521,7 +534,7 @@ module.exports = function(grunt) {
 
             const done = this.async();
             iam.getUser((err, data) => {
-                if(err) {
+                if (err) {
                     grunt.log.error(`Unable to extract AWS information for profile: [${AWS_PROFILE}]`);
                     done(false);
                     return;
@@ -530,7 +543,7 @@ module.exports = function(grunt) {
                 const accountId = data.User.Arn.split(':')[4];
                 const arnPrefix = `arn:aws:lambda:${AWS_REGION}:${accountId}:function:`;
                 _lambdaConfig.lambdas.forEach((config) => {
-                    if(!functionNameFilter.test(config.functionName)) {
+                    if (!functionNameFilter.test(config.functionName)) {
                         grunt.log.debug(`Skipping function: [${config.functionName}]`);
                         return;
                     }
@@ -560,16 +573,16 @@ module.exports = function(grunt) {
         function(testType) {
             let testAction;
 
-            if(['unit', 'e2e'].indexOf(testType) >= 0) {
+            if (['unit', 'e2e'].indexOf(testType) >= 0) {
                 testAction = `mocha_istanbul:${testType}`;
                 const testSuite = grunt.option('test-suite');
-                if(typeof testSuite === 'string' && testSuite.length > 0) {
+                if (typeof testSuite === 'string' && testSuite.length > 0) {
                     grunt.log.writeln('Running test suite: ', testSuite);
                     grunt.config.set(`mocha_istanbul.${testType}`, TEST.unit.getChildPath(testSuite));
                 }
             }
 
-            if(testAction) {
+            if (testAction) {
                 grunt.task.run(testAction);
             } else {
                 grunt.log.warn('Unrecognized test type. Please see help (grunt help) for task usage information');
@@ -603,7 +616,7 @@ module.exports = function(grunt) {
                 }
             });
 
-            if(tasks.length > 0) {
+            if (tasks.length > 0) {
                 grunt.config.set('watch.allSources.tasks', tasks);
                 grunt.log.writeln('Tasks to run on change: [' + tasks + ']');
                 grunt.task.run('watch:allSources');
@@ -622,23 +635,23 @@ module.exports = function(grunt) {
             const separator = new Array(80).join('-');
             function _showRecursive(root, indent) {
                 let indentChars = '  ';
-                if(!indent) {
+                if (!indent) {
                     indent = 0;
-                } else  {
+                } else {
                     indentChars += '|';
                 }
                 indentChars += new Array(indent).join(' ');
                 indentChars += '|--- ';
                 let hasChildren = false;
-                for(let prop in root) {
+                for (let prop in root) {
                     const member = root[prop];
-                    if(typeof member === 'object') {
+                    if (typeof member === 'object') {
                         const maxLen = 74 - (indentChars.length + prop.length);
                         const status = _utils.padLeft(member.getStatus(), maxLen);
 
                         grunt.log.writeln(indentChars + prop + status);
                         hasChildren = true;
-                        if(_showRecursive(member, indent  + 4)) {
+                        if (_showRecursive(member, indent + 4)) {
                             grunt.log.writeln('  |');
                         }
                     }
@@ -656,19 +669,19 @@ module.exports = function(grunt) {
     /**
      * Lint task - checks source and test files for linting errors.
      */
-    grunt.registerTask('lint', [ 'eslint:dev' ]);
+    grunt.registerTask('lint', ['eslint:dev']);
 
     /**
      * Formatter task - formats all source and test files.
      */
-    grunt.registerTask('format', [ 'esformatter' ]);
+    grunt.registerTask('format', ['esformatter']);
 
     /**
      * Shows help information on how to use the Grunt tasks.
      */
     grunt.registerTask('help',
         'Displays grunt help documentation',
-        function(){
+        function() {
             grunt.log.writeln(HELP_TEXT);
         }
     );
