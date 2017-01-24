@@ -19,7 +19,7 @@ module.exports = (dirInfo) => {
     const tableName = env.getSuffixString('<%= projectPrefix %>-<%= triggerTableSource %>');
     const tableKey = dirInfo.getNamespacedToken('dynamodb_table', tableName);
 
-    const functionName = '<%= triggerLambdaFunction %>';
+    const functionName = '<%= projectPrefix %>-<%= triggerLambdaFunction %>';
 
     const alias = envStr;
 

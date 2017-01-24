@@ -36,7 +36,7 @@ module.exports = _yeoman.Base.extend({
         _fs.readdir(path, (err, data) => {
             if(!err) {
                 this.availableSources = data.map((item) => {
-                    return item.replace(/-table.js$/,'');
+                    return item.replace(/-table.js$/,'').replace(/-/g, '_');
                 });
             }
             done();
@@ -84,7 +84,12 @@ module.exports = _yeoman.Base.extend({
             type: 'list',
             name: 'triggerLambdaFunction',
             message: 'Event handler lambda?',
-            choices: this.availableLambdas
+            choices: (answers) => {
+                const prefix = `${this.props.projectPrefix}-`;
+                return this.availableLambdas.map((lambda) =>{
+                    return lambda.replace(prefix, '');
+                });
+            }
         }, {
             type: 'list',
             name: 'triggerStartPosition',
@@ -101,7 +106,7 @@ module.exports = _yeoman.Base.extend({
             name: 'triggerName',
             message: 'Trigger name?',
             default: (answers) => {
-                return `${answers.triggerTableSource}_${answers.triggerLambdaFunction}`;
+                return `${answers.triggerTableSource}__${answers.triggerLambdaFunction}`;
             }
         }, {
             type: 'input',
