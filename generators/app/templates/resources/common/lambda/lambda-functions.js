@@ -35,12 +35,11 @@ module.exports = (dirInfo) => {
         }
 
         const aliasTemplates = environments.map((envStr) => {
-            const envStr = '<%= envStr %>';
             const env = new Environment(envStr);
+            const aliasToken = env.getSuffixString(functionName);
 
-            const aliasName = env.getSuffixString(`${functionName}_alias`);
-            const aliasKey = dirInfo.getNamespacedToken('lambda_alias', aliasName);
-            return new AliasTemplate(aliasKey, aliasName, functionName)
+            const aliasKey = dirInfo.getNamespacedToken('lambda_alias', aliasToken);
+            return new AliasTemplate(aliasKey, envStr, functionName)
                 .addDependency(functionKey);
         });
 
