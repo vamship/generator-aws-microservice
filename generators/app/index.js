@@ -6,14 +6,16 @@ const _yosay = require('yosay');
 
 const _prompts = require('../../utils/prompts');
 const _consts = require('../../utils/constants');
+const _package = require('../../package.json');
 
 module.exports = _yeoman.Base.extend({
    /**
     * Gather basic project information.
     */
     gatherProjectInfo: function () {
+        const generatorTitle = `${_consts.GENERATOR_NAME} v${_package.version}`;
         this.log(_yosay(
-            `Welcome to the ${_chalk.red(_consts.GENERATOR_NAME)} generator!`
+            `AWS Microservice Generator.\n${_chalk.red(generatorTitle)} `
         ));
         return _prompts.getProjectInfo(this, true)
             .then(() => { return _prompts.getAuthorInfo(this, true) })
