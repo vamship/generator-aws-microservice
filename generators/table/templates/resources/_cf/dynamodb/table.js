@@ -23,7 +23,7 @@ module.exports = (dirInfo) => {
     const envStr = '<%= envStr %>';
     const env = new Environment(envStr);
 
-    const tableName = env.getSuffixString('<%= projectPrefix %>.<%= tableName %>');
+    const tableName = env.getSuffixString('<%= projectPrefix %>-<%= tableName %>');
     const tableKey = dirInfo.getNamespacedToken('dynamodb_table', tableName);
 
     return (new TableTemplate(tableKey, tableName))

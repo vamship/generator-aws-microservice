@@ -67,7 +67,7 @@ module.exports = _yeoman.Base.extend({
                 message: 'Index name?',
                 default: (answers) => {
                     const hashKey = answers.tableIndexHashKey || this.props.tableHashKey;
-                    return `${hashKey}-${answers.tableIndexRangeKey}-index`;
+                    return `${hashKey}_${answers.tableIndexRangeKey}_index`;
                 },
                 when: (answers) => answers.tableIndexCreate
             }, {
@@ -133,7 +133,7 @@ module.exports = _yeoman.Base.extend({
             type: 'input',
             name: 'tableName',
             message: 'Table name?',
-            default: 'lambda-data-store'
+            default: 'lambda_data_store'
         }, {
             type: 'input',
             name: 'tableReadCapacity',

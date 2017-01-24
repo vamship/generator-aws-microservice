@@ -13,10 +13,10 @@ module.exports = (dirInfo) => {
     const envStr = '<%= envStr %>';
     const env = new Environment(envStr);
 
-    const mappingName = env.getSuffixString('<%= projectPrefix %>.<%= triggerName %>');
+    const mappingName = env.getSuffixString('<%= projectPrefix %>-<%= triggerName %>');
     const mappingKey = dirInfo.getNamespacedToken('lambda_event', mappingName);
 
-    const tableName = env.getSuffixString('<%= projectPrefix %>.<%= triggerTableSource %>');
+    const tableName = env.getSuffixString('<%= projectPrefix %>-<%= triggerTableSource %>');
     const tableKey = dirInfo.getNamespacedToken('dynamodb_table', tableName);
 
     const functionName = '<%= triggerLambdaFunction %>';

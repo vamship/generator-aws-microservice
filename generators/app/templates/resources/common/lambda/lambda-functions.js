@@ -1,5 +1,6 @@
 'use strict';
 
+const Environment = require('wysknd-aws-lambda').Environment;
 const LambdaTemplates = require('wysknd-aws-cf-generator').LambdaTemplates;
 const FunctionTemplate = LambdaTemplates.FunctionTemplate;
 const AliasTemplate = LambdaTemplates.AliasTemplate;
@@ -10,14 +11,14 @@ module.exports = (dirInfo) => {
     const environments = [<%- projectTargetEnvironments.map(item => `'${item}'`).join(',') %>];
 
     return _lambdaConfig.lambdas.map((lambda) => {
-        const roleName = '<%= projectPrefix %>.default_lambda_role';
+        const roleName = '<%= projectPrefix %>-default_lambda_role';
         const roleKey = dirInfo.getNamespacedToken('iam_role', roleName);
 
         const functionName = lambda.functionName;
         const functionKey = dirInfo.getNamespacedToken('lambda_function', functionName);
 
         const functionTemplate = new FunctionTemplate(functionKey, functionName, lambda.handlerName)
-            .setRole(`$REGION.${roleName}`)
+            .setRole(`$REGION_${roleName}`)
             .addDependency(roleKey);
 
         if (typeof lambda.description === 'string' &&
@@ -33,9 +34,13 @@ module.exports = (dirInfo) => {
             functionTemplate.setTimeout(lambda.timeout);
         }
 
-        const aliasTemplates = environments.map((envName) => {
-            const aliasKey = dirInfo.getNamespacedToken('lambda_alias', `${functionName}_${envName}`);
-            return new AliasTemplate(aliasKey, envName, functionName)
+        const aliasTemplates = environments.map((envStr) => {
+            const envStr = '<%= envStr %>';
+            const env = new Environment(envStr);
+
+            const aliasName = env.getSuffixString(`${functionName}_alias`);
+            const aliasKey = dirInfo.getNamespacedToken('lambda_alias', aliasName);
+            return new AliasTemplate(aliasKey, aliasName, functionName)
                 .addDependency(functionKey);
         });
 
