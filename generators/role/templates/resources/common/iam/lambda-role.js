@@ -7,9 +7,9 @@ const PolicyStatement = IamTemplates.PolicyStatement;
 
 module.exports = (dirInfo) => {
     const roleName = '<%= projectPrefix %>.<%= roleName %>';
-    const key = dirInfo.getNamespacedToken('iam_role', roleName);
+    const roleKey = dirInfo.getNamespacedToken('iam_role', roleName);
 
-    return new RoleTemplate(key, roleName)
+    return new RoleTemplate(roleKey, roleName)
         .setAssumePolicy(
             (new PolicyDocument())
                 .addStatement((new PolicyStatement())
