@@ -67,7 +67,7 @@ module.exports = _yeoman.Base.extend({
                 message: 'Index name?',
                 default: (answers) => {
                     const hashKey = answers.tableIndexHashKey || this.props.tableHashKey;
-                    return `${hashKey}_${answers.tableIndexRangeKey}_index`;
+                    return `${hashKey}_${answers.tableIndexRangeKey}_${isGlobal?'gsi':'lsi'}`;
                 },
                 when: (answers) => answers.tableIndexCreate
             }, {
