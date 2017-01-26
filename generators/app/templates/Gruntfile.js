@@ -577,8 +577,10 @@ module.exports = function(grunt) {
                 testAction = `mocha_istanbul:${testType}`;
                 const testSuite = grunt.option('test-suite');
                 if (typeof testSuite === 'string' && testSuite.length > 0) {
-                    grunt.log.writeln('Running test suite: ', testSuite);
-                    grunt.config.set(`mocha_istanbul.${testType}`, TEST.unit.getChildPath(testSuite));
+                    const testBase = (testType === 'unit') ? TEST.unit:TEST.e2e;
+                    const suitePath = testBase.getChildPath(testSuite);
+                    grunt.log.writeln(`Running test suite: [${testSuite}], Path: [${suitePath}]`);
+                    grunt.config.set(`mocha_istanbul.${testType}`, suitePath);
                 }
             }
 
