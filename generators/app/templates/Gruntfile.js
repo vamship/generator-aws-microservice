@@ -118,8 +118,10 @@ module.exports = function(grunt) {
                 'e2e': null                 /*  |   |--- e2e                  */
             },                              /*  |                             */
             'resources': {                  /*  |--- resources                */
-                'cf': null,                 /*  |    | --- cf                 */
-                'data': null                /*  |    | --- data               */
+                'common': null,             /*  |    | --- cf                 */
+                'dev': null,                /*  |    | --- dev                */
+                'qa': null,                 /*  |    | --- qa                 */
+                'prod': null                /*  |    | --- prod               */
             },                              /*  |                             */
             'working': null,                /*  |--- working                  */
             'dist': null,                   /*  |--- dist                     */
@@ -254,7 +256,7 @@ module.exports = function(grunt) {
             src: [
                 'Gruntfile.js',
                 SRC.allFilesPattern('js'),
-                RESOURCES.cf.allFilesPattern('js'),
+                RESOURCES.allFilesPattern('js'),
                 TEST.allFilesPattern('js')
             ]
         },
@@ -267,7 +269,7 @@ module.exports = function(grunt) {
             dev: [
                 'Gruntfile.js',
                 SRC.allFilesPattern('js'),
-                RESOURCES.cf.allFilesPattern('js'),
+                RESOURCES.allFilesPattern('js'),
                 TEST.allFilesPattern('js')
             ]
         },
@@ -312,7 +314,7 @@ module.exports = function(grunt) {
                 }
             },
             common: {
-                description: 'Common resources for project: <%= projectName %>',
+                description: '<%= projectName %> (COMMON)',
                 output: {
                     fileName: _getTemplateName('common')
                 },
@@ -321,7 +323,7 @@ module.exports = function(grunt) {
                 }
             },
             dev: {
-                description: 'Development stack resources for project: <%= projectName %>',
+                description: '<%= projectName %> (DEV)',
                 output: {
                     fileName: _getTemplateName('dev')
                 },
@@ -330,7 +332,7 @@ module.exports = function(grunt) {
                 }
             },
             qa: {
-                description: 'QA stack resources for project: <%= projectName %>',
+                description: '<%= projectName %> (QA)',
                 output: {
                     fileName: _getTemplateName('qa')
                 },
@@ -339,7 +341,7 @@ module.exports = function(grunt) {
                 }
             },
             prod: {
-                description: 'PRODUCTION stack resources for project: <%= projectName %>',
+                description: '<%= projectName %> (PROD)',
                 output: {
                     fileName: _getTemplateName('prod')
                 },

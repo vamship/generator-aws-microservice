@@ -8,7 +8,7 @@ const AliasTemplate = LambdaTemplates.AliasTemplate;
 const _lambdaConfig = require('../../../src/lambda-config');
 
 module.exports = (dirInfo) => {
-    const environments = [<%- projectTargetEnvironments.map(item => `'${item}'`).join(',') %>];
+    const environments = [<%- projectTargetEnvironments.map(item => `'${item}'`).join(', ') %>];
 
     return _lambdaConfig.lambdas.map((lambda) => {
         const roleName = '<%= projectPrefix %>-default_lambda_role';
