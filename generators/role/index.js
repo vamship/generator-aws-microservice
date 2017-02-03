@@ -8,6 +8,13 @@ const _consts = require('../../utils/constants');
 
 module.exports = _yeoman.Base.extend({
     /**
+     * Initializes the generator.
+     */
+    constructor: function() {
+        _yeoman.Base.apply(this, arguments);
+    },
+
+    /**
      * Shows a the title of the sub generator, and a brief description.
      */
     showTitle: function() {
