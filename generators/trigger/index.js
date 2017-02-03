@@ -1,9 +1,9 @@
 'use strict';
 
-const _fs = require('fs');
 const _yeoman = require('yeoman-generator');
 const _decamelize = require('decamelize');
 
+const _fsUtils = require('../../utils/fs-utils');
 const _prompts = require('../../utils/prompts');
 const _consts = require('../../utils/constants');
 
@@ -32,12 +32,13 @@ module.exports = _yeoman.Base.extend({
     lookupAvailableSources: function() {
         const done = this.async();
         const path = this.destinationPath('resources/dev/dynamodb');
-        _fs.readdir(path, (err, data) => {
-            if(!err) {
-                this.availableSources = data.map((item) => {
-                    return item.replace(/-table.js$/,'').replace(/-/g, '_');
-                });
+        _fsUtils.getFilesInDir(path, (parent, fileName, stats) => {
+            if(!stats.isDirectory()) {
+                return fileName.replace(/-table.js$/,'').replace(/-/g, '_');
             }
+        }).then((results) => {
+            this.availableSources = results;
+        }).finally(() => {
             done();
         });
     },
