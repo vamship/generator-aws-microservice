@@ -4,7 +4,7 @@ const _folder = require('wysknd-lib').folder;
 const _utils = require('wysknd-lib').utils;
 const _lambdaConfig = require('./src/lambda-config.json');
 const _awsSdk = require('aws-sdk');
-const DEPLOY_STACKS = ['dev', 'qa', 'prod', 'common'];
+const DEPLOY_STACKS = ['dev', 'qa', 'prod', 'core', 'api'];
 
 // Need to set project specific options here.
 const AWS_PROFILE = '<%= awsProfile %>';
@@ -33,9 +33,9 @@ const HELP_TEXT =
 '   clean             : Cleans out all build artifacts and other temporary files \n' +
 '                       or directories.                                          \n' +
 '                                                                                \n' +
-'   monitor:[opt1]:   : Monitors files for changes, and triggers actions based   \n' +
-'           [opt2]:     on specified options. Supported options are as follows:  \n' +
-'           [opt3]       [lint]    : Performs linting with default options       \n' +
+'   monitor:[<opt1>]: : Monitors files for changes, and triggers actions based   \n' +
+'           [<opt2>]:   on specified options. Supported options are as follows:  \n' +
+'           [<opt3>]     [lint]    : Performs linting with default options       \n' +
 '                                    against all source files.                   \n' +
 '                        [unit]    : Executes unit tests against all source      \n' +
 '                                    files.                                      \n' +
@@ -59,11 +59,35 @@ const HELP_TEXT =
 '                       and minor version numbers can be incremented by          \n' +
 '                       specifying the "major" or "minor" subtask.               \n' +
 '                                                                                \n' +
-'  cf:[dev|qa|prod|   : Generates, creates, updates, deletes or shows status on a\n' +
-'      common]:         cloud formation script associated with a specific        \n' +
-'      [generate|       stack environment. The first target identifies the stack \n' +
-'        create|update| (dev/qa/prod/common), while the second target specifies  \n' +
-'        delete|status] the action to take (generate/create/update/delete/status)\n' +
+'  cf:[<action>]:     : Performs cloud formation actions on specific environment \n' +
+'     [<stack>]         stacks.                                                  \n' +
+'                       The first target specifies the action, which may be one  \n' +
+'                       of the following:                                        \n' +
+'                        [generate] : Generates the cloud formation template,    \n' +
+'                                     but does not perform any other action.     \n' +
+'                        [create]   : Generates the cloud formation template and \n' +
+'                                     creates the stack in the cloud.            \n' +
+'                        [update]   : Generates the cloud formation template and \n' +
+'                                     updates an existing stack in the cloud.    \n' +
+'                        [delete]   : Deletes an existing stack in the cloud. No \n' +
+'                                     template will be generated.                \n' +
+'                        [status]   : Checks on teh status of an existing stack  \n' +
+'                                     in the cloud. No template will be          \n' +
+'                                     generated.                                 \n' +
+'                       The second target specifies the stack to perform the     \n' +
+'                       action on, which may be one of the following:            \n' +
+'                        [core]   : The core stack, which defines resources that \n' +
+'                                   are common to the entire microservice. This  \n' +
+'                                   typically includes lambda function and role  \n' +
+'                                   definitions.                                 \n' +
+'                        [api]    : The api stack that defines API gateway       \n' +
+'                                   resources for the microservice.              \n' +
+'                        [dev]    : A stack that defines development environment \n' +
+'                                   specific resources.                          \n' +
+'                        [qa]     : A stack that defines qa/testing environment  \n' +
+'                                   specific resources.                          \n' +
+'                        [prod]   : A stack that defines production environment  \n' +
+'                                   specific resources.                          \n' +
 '                                                                                \n' +
 '  package            : Packages all lambda functions, and creates a package     \n' +
 '                       file for deployment.                                     \n' +
@@ -118,7 +142,8 @@ module.exports = function(grunt) {
                 'e2e': null                 /*  |   |--- e2e                  */
             },                              /*  |                             */
             'resources': {                  /*  |--- resources                */
-                'common': null,             /*  |    | --- cf                 */
+                'core': null,               /*  |    | --- core               */
+                'api': null,                /*  |    | --- api                */
                 'dev': null,                /*  |    | --- dev                */
                 'qa': null,                 /*  |    | --- qa                 */
                 'prod': null                /*  |    | --- prod               */
@@ -313,13 +338,22 @@ module.exports = function(grunt) {
                     rootDir: RESOURCES.getPath(),
                 }
             },
-            common: {
-                description: '<%= projectName %> (COMMON)',
+            core: {
+                description: '<%= projectName %> (CORE)',
                 output: {
-                    fileName: _getTemplateName('common')
+                    fileName: _getTemplateName('core')
                 },
                 input: {
-                    templateDir: 'common'
+                    templateDir: 'core'
+                }
+            },
+            api: {
+                description: '<%= projectName %> (API)',
+                output: {
+                    fileName: _getTemplateName('api')
+                },
+                input: {
+                    templateDir: 'api'
                 }
             },
             dev: {
@@ -433,8 +467,8 @@ module.exports = function(grunt) {
      */
     grunt.registerTask('cf',
         'Enables create, update, delete or status check on the cloud formation stack for the specified deployment environment',
-        function(stackEnv, action) {
-            stackEnv = stackEnv || 'common';
+        function(action, stackEnv) {
+            stackEnv = stackEnv || 'core';
             action = action || 'update';
             grunt.log.writeln(`Executing cloudformation action [${action}] for stack [${stackEnv}]`);
             if (DEPLOY_STACKS.indexOf(stackEnv) < 0) {

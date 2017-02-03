@@ -225,7 +225,7 @@ module.exports = _yeoman.Base.extend({
                 envStr: envStr
             });
             this.fs.copyTpl(
-                this.templatePath(`resources/_cf/dynamodb/table.js`),
+                this.templatePath(`resources/_env/dynamodb/table.js`),
                 this.destinationPath(`resources/${envStr}/dynamodb/${this.props.tableTemplateFile}.js`),
                 props
             );

@@ -144,7 +144,7 @@ module.exports = _yeoman.Base.extend({
                 envStr: envStr
             });
             this.fs.copyTpl(
-                this.templatePath(`resources/_cf/lambda/trigger.js`),
+                this.templatePath(`resources/_env/lambda/trigger.js`),
                 this.destinationPath(`resources/${envStr}/lambda/${this.props.triggerTemplateFile}.js`),
                 props
             );
