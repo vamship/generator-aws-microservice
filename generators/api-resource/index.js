@@ -38,7 +38,7 @@ module.exports = _yeoman.Base.extend({
      */
     showTitle: function() {
         this.log(_consts.SEPARATOR);
-        this.log('Create a rest API:\n');
+        this.log('Create a REST API Resource:\n');
     },
 
     /**
