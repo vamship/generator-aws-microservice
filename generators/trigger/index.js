@@ -2,7 +2,6 @@
 
 const _fs = require('fs');
 const _yeoman = require('yeoman-generator');
-const _camelCase = require('camelcase');
 const _decamelize = require('decamelize');
 
 const _prompts = require('../../utils/prompts');
