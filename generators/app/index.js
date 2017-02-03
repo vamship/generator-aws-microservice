@@ -18,8 +18,28 @@ module.exports = _yeoman.Base.extend({
             `AWS Microservice Generator.\n${_chalk.red(generatorTitle)} `
         ));
         return _prompts.getProjectInfo(this, true)
-            .then(() => { return _prompts.getAuthorInfo(this, true) })
-            .then(() => { return _prompts.getAwsInfo(this, true) });
+            .then(() => {
+                this.log(_consts.SEPARATOR);
+                const modifiedProjectName = this.props.projectName
+                                                .replace(this.props.projectPrefix + '-', '')
+                                                .replace(/-/g, ' ');
+                const prompts = [{
+                    type: 'input',
+                    name: 'apiName',
+                    message: 'API Name?',
+                    default: answers => `${modifiedProjectName} API`
+                }, {
+                    type: 'input',
+                    name: 'apiDescription',
+                    message: 'API Description?',
+                    default: answers => `API for the ${modifiedProjectName} microservice`
+                }];
+                return this.prompt(prompts).then((props) => {
+                    this.props = Object.assign(this.props || {}, props);
+                    this.log(_consts.SEPARATOR);
+                });
+             }).then(() => { return _prompts.getAuthorInfo(this, true); })
+            .then(() => { return _prompts.getAwsInfo(this, true); });
     },
 
     /**
@@ -41,6 +61,7 @@ module.exports = _yeoman.Base.extend({
             'config/prod.json',
             'config/custom-environment-variables.json',
             'resources/core/lambda/lambda-functions.js',
+            'resources/api/api.js',
             'src/lambda-config.json',
             'src/index.js',
             'test/unit/index-spec.js'
