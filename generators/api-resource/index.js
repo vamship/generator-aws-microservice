@@ -17,10 +17,10 @@ module.exports = _yeoman.Base.extend({
     },
 
     /**
-     * Queries the project to identify all defined dynamodb tables that can
-     * serve as event sources.
+     * Queries the project to identify all defined resources that can serve as
+     * parent resources to a resource.
      */
-    lookupAvailableSources: function() {
+    lookupAvailableResources: function() {
         const done = this.async();
         const path = this.destinationPath('resources/api');
         _fsUtils.getSubDirectoryPaths(path).then((dirList) => {
