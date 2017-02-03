@@ -17,14 +17,18 @@ module.exports = _yeoman.Base.extend({
      * Shows a the title of the sub generator, and a brief description.
      */
     showTitle: function() {
+        const title = this.options.apiModelTitle || 'Create a model for a REST request/response';
         this.log(_consts.SEPARATOR);
-        this.log('Create a model for a REST request/response:\n');
+        this.log(title);
     },
 
     /**
      * Gathers model information
      */
     gatherModelInfo: function () {
+        this.props = this.props || {};
+        this.props.apiModelName = this.options.apiModelName;
+        this.props.apiModelDescription = this.options.apiModelDescription;
         const prompts = [{
             type: 'input',
             name: 'apiModelName',
@@ -35,11 +39,13 @@ module.exports = _yeoman.Base.extend({
                     return true;
                 }
                 return 'A valid model name must be specified';
-            }
+            },
+            when: answers => !this.props.apiModelName
         }, {
             type: 'input',
             name: 'apiModelDescription',
             message: 'Model Description?',
+            when: answers => !this.props.apiModelDescription
         }];
 
         return this.prompt(prompts).then((props) => {
