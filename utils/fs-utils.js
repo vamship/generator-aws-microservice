@@ -78,7 +78,8 @@ module.exports = {
                     return select(dirPath, fileName, stats);
                 });
             });
+        }).then((list) => {
+            return list.filter(item => item);
         });
     }
-
 };
