@@ -42,9 +42,9 @@ module.exports = _yeoman.Base.extend({
     },
 
     /**
-     * Gathers trigger information
+     * Gathers resource information
      */
-    gatherTriggerInfo: function () {
+    gatherResourceInfo: function () {
         const prompts = [{
             type: 'list',
             name: 'apiParentResource',
@@ -92,13 +92,12 @@ module.exports = _yeoman.Base.extend({
     /**
      * Creates cloud formation template for the api resource
      */
-    createTriggerTemplate: function() {
+    createResourceTemplate: function() {
         let updated = false;
         const resourcePath = this.props.apiResourcePath;
         const resTokens = (resourcePath === EMPTY_RESOURCE)?'':resourcePath;
 
         let basePath = `resources/api${this.props.apiParentResource}`;
-        let depth = 1;
         resTokens.split('/').forEach((resourceName) => {
             const isRoot = (basePath === 'resources/api/');
             const props = Object.assign({}, this.props, {
