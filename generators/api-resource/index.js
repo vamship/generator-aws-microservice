@@ -28,7 +28,7 @@ module.exports = _yeoman.Base.extend({
             this.availableResources = dirList.map(item => item.replace(pathRegex, '/'));
             done();
         }).catch((ex) => {
-            this.env.error('Error determining existing API resources');
+            this.env.error('Error listing existing API resources');
             done(ex);
         });
     },
