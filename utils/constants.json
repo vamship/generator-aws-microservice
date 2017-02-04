@@ -7,5 +7,6 @@
     "SUB_GEN_ROLE": "role",
     "SUB_GEN_API_RESOURCE": "api-resource",
     "SUB_GEN_API_MODEL": "api-model",
+    "SUB_GEN_API_METHOD": "api-method",
     "SUB_GEN_FINISH": "_finish"
 }
