@@ -19,7 +19,8 @@ module.exports = _yeoman.Base.extend({
      */
     showTitle: function() {
         this.log(_consts.SEPARATOR);
-        this.log('Create IAM role for lambda functions:');
+        const title = this.options.title || 'Create a new IAM Role:';
+        this.log(title);
         if(this.options.roleName) {
             this.log(` Role name: ${this.options.roleName}\n`);
         } else {
@@ -34,6 +35,7 @@ module.exports = _yeoman.Base.extend({
         this.log(_consts.SEPARATOR);
         this.props = this.props || {};
         this.props.roleName = this.options.roleName;
+        this.props.roleAssumedBy = this.options.roleAssumedBy;
         const prompts = [];
         if(!this.props.roleName) {
             prompts.push({
@@ -54,32 +56,59 @@ module.exports = _yeoman.Base.extend({
                 }
             });
         }
+
+        if(!this.props.roleAssumedBy) {
+            prompts.push({
+                type: 'list',
+                name: 'roleAssumedBy',
+                message: 'Role Assumed By?',
+                choices: ['LAMBDA', 'API GATEWAY'],
+                default: 0
+            });
+        }
+
         prompts.push({
             type: 'checkbox',
             name: 'rolePolicies',
             message: 'Choose one or more policies that apply to the role',
-            choices: [ {
-                name: ' All AWS Services (Be careful with this one ..)',
-                value: 'ALL_ACCESS',
-            }, {
-                name: ' DynamoDb Read Only',
-                value: 'DYNAMO_READ_ONLY',
-            }, {
-                name: ' DynamoDb Read/Write',
-                value: 'DYNAMO_READ_WRITE',
-            }, {
-                name: ' S3 Read Only',
-                value: 'S3_READ_ONLY',
-            }, {
-                name: ' S3 Read/Write',
-                value: 'S3_READ_WRITE',
-            }, {
-                name: ' Lambda Invoke',
-                value: 'LAMBDA_INVOKE',
-            }, {
-                name: ' Kinesis Read Only',
-                value: 'KINESIS_READ_ONLY'
-            }],
+            choices: (answers) => {
+                const assumedBy = this.props.roleAssumedBy || answers.roleAssumedBy;
+                if(assumedBy === 'LAMBDA') {
+                    return [{
+                        name: ' All AWS Services (Be careful with this one ..)',
+                        value: 'ALL_ACCESS',
+                    }, {
+                        name: ' DynamoDb Read Only',
+                        value: 'DYNAMO_READ_ONLY',
+                    }, {
+                        name: ' DynamoDb Read/Write',
+                        value: 'DYNAMO_READ_WRITE',
+                    }, {
+                        name: ' S3 Read Only',
+                        value: 'S3_READ_ONLY',
+                    }, {
+                        name: ' S3 Read/Write',
+                        value: 'S3_READ_WRITE',
+                    }, {
+                        name: ' Lambda Invoke',
+                        value: 'LAMBDA_INVOKE',
+                    }, {
+                        name: ' Kinesis Read Only',
+                        value: 'KINESIS_READ_ONLY'
+                    }];
+                } else {
+                    return [{
+                        name: ' S3 Read Only',
+                        value: 'S3_READ_ONLY',
+                    }, {
+                        name: ' S3 Read/Write',
+                        value: 'S3_READ_WRITE',
+                    }, {
+                        name: ' Lambda Invoke',
+                        value: 'LAMBDA_INVOKE',
+                    }];
+                }
+            },
             default: []
         });
 
@@ -104,7 +133,7 @@ module.exports = _yeoman.Base.extend({
      */
     createRoleTemplate: function() {
         this.fs.copyTpl(
-            this.templatePath(`resources/core/iam/lambda-role.js`),
+            this.templatePath(`resources/core/iam/role.js`),
             this.destinationPath(`resources/core/iam/${this.props.roleTemplateFile}.js`),
             this.props
         );

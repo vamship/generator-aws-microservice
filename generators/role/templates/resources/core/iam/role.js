@@ -14,7 +14,11 @@ module.exports = (dirInfo) => {
             (new PolicyDocument())
                 .addStatement((new PolicyStatement())
                     .addAction('sts:AssumeRole')
+<% if(roleAssumedBy === 'LAMBDA') { -%>
                     .addServicePrincipal('lambda.amazonaws.com')))
+<% } else {-%>
+                    .addServicePrincipal('apigateway.amazonaws.com')))
+<% } -%>
 <% if(rolePolicies.indexOf('ALL_ACCESS') >= 0) { -%>
         .addAwsManagedPolicy('AWSLambdaFullAccess')
 <% } -%>
