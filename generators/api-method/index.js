@@ -253,5 +253,12 @@ module.exports = _yeoman.Base.extend({
             this.destinationPath(`resources/api${resource}/${methodFile}.js`),
             this.props
         );
+    },
+
+    /**
+     * Finish up and show user messae.
+     */
+    finish() {
+        this.log('A new API method will be created. You will have to update the request and response mappings within the template');
     }
 });
