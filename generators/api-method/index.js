@@ -1,6 +1,7 @@
 'use strict';
 
 const _yeoman = require('yeoman-generator');
+const _pascalCase = require('pascalcase');
 
 const _fsUtils = require('../../utils/fs-utils');
 const _consts = require('../../utils/constants');
@@ -14,6 +15,15 @@ module.exports = _yeoman.Base.extend({
         this.availableResources = ['/'];
         this.availableAuthorizers = ['NONE'];
         this.availableLambdas = null;
+        this.availableModels = ['NONE', 'CREATE NEW'];
+    },
+
+    /**
+     * Shows a the title of the sub generator, and a brief description.
+     */
+    showTitle: function() {
+        this.log(_consts.SEPARATOR);
+        this.log('Create a REST API method:\n');
     },
 
     /**
@@ -50,9 +60,33 @@ module.exports = _yeoman.Base.extend({
                 return fileName.replace(pattern,'').replace(/-/g, '_');
             }
         }).then((results) => {
-            this.availableAuthorizers = ['NONE'].concat(results);
+            this.availableAuthorizers = this.availableAuthorizers.concat(results);
             done();
         }).catch((ex) => {
+            done(ex);
+        });
+    },
+
+    /**
+     * Queries the project to identify all defined models that can be
+     * attached to methods.
+     */
+    lookupAvailableModels: function() {
+        const done = this.async();
+        const path = this.destinationPath('resources/api/_models');
+        const pattern = /-model\.js$/;
+        _fsUtils.getFilesInDir(path, (parent, fileName, stats) => {
+            if(!stats.isDirectory() && fileName.match(pattern)) {
+                return _pascalCase(fileName.replace(pattern,''));
+            }
+        }).then((results) => {
+            this.availableModels = this.availableModels.concat(results);
+            done();
+        }).catch((ex) => {
+            if(ex.code === 'ENOENT') {
+                // The _models directory has not been created yet. Skip.
+                return done();
+            }
             done(ex);
         });
     },
@@ -70,14 +104,6 @@ module.exports = _yeoman.Base.extend({
         this.availableLambdas = lambdaConfig.lambdas.map((lambda) => {
             return lambda.functionName;
         });
-    },
-
-    /**
-     * Shows a the title of the sub generator, and a brief description.
-     */
-    showTitle: function() {
-        this.log(_consts.SEPARATOR);
-        this.log('Create a REST API method:\n');
     },
 
     /**
@@ -143,18 +169,52 @@ module.exports = _yeoman.Base.extend({
             default: 0
         }, {
             type: 'input',
+            name: 'apiMethodS3Path',
+            message: 'S3 Path?',
+            when: answers => answers.apiMethodBackendType === 'S3',
+            validate: (response) => {
+                const pattern = /^(\/({[a-zA-Z0-9_-]+}|[a-zA-Z0-9_-]+))+$/;
+                if(response.match(pattern)) {
+                    return true;
+                }
+                return 'Resource name can only contain letters, numbers, "_" and "-".\n  Parameterized resource paths should be surrounded by "{}"';
+            }
+        }, {
+            type: 'list',
+            name: 'apiMethodRequestModel',
+            message: 'Request Model?',
+            choices: this.availableModels,
+            default: 0
+        }, {
+            type: 'input',
             name: 'apiMethodRequestModelName',
-            message: 'Request Model Name (ex: CreateUserRequest) (Leave empty if no model is required)?\n',
+            message: 'New Request Model Name (ex: CreateUserRequest)?',
+            when: answers => answers.apiMethodRequestModel === 'CREATE NEW',
+            default: '',
             validate: modelNameValidator
+        }, {
+            type: 'list',
+            name: 'apiMethodResponseModel',
+            message: 'Response Model?',
+            choices: this.availableModels,
+            default: 0
         }, {
             type: 'input',
             name: 'apiMethodResponseModelName',
-            message: 'Response Model Name (ex: CreateUserRequest) (Leave empty if no model is required)?\n',
+            message: 'New Response Model Name (ex: CreateUserRequest)?',
+            when: answers => answers.apiMethodResponseModel === 'CREATE NEW',
+            default: '',
             validate: modelNameValidator
         }];
 
         return this.prompt(prompts).then((props) => {
             this.props = Object.assign(this.props || {}, props);
+            if(this.props.apiMethodRequestModel === 'NONE') {
+                this.props.apiMethodRequestModelName = '';
+            }
+            if(this.props.apiMethodResponseModel === 'NONE') {
+                this.props.apiMethodResponseModelName = '';
+            }
         });
     },
 

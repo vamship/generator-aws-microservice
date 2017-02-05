@@ -54,6 +54,8 @@ ${_mappingHelper.mapUserFromJwt({
         .setMockBackend()
 <% } else if(apiMethodBackendType === 'LAMBDA') { -%>
         .setBackendLambda('<%= apiMethodLambda %>')
+<% } else if(apiMethodBackendType === 'S3') { -%>
+        .setBackendS3('<%= apiMethodS3Path %>')
 <% } -%>
 <% if(apiMethodAuthorizer !== 'NONE') { -%>
         .setRequestHeader('Authorization', true)
