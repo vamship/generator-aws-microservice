@@ -40,7 +40,18 @@ module.exports = _yeoman.Base.extend({
                 type: 'input',
                 name: 'roleName',
                 message: 'Role name?',
-                default: `default_lambda_role`
+                default: `default_lambda_role`,
+                filter: (response) => {
+                    const suffix = response.endsWith('_role')?'':'_role';
+                    return `${response}${suffix}`;
+                },
+                validate: (response) => {
+                    const pattern = /^[a-zA-Z0-9_]+$/;
+                    if(response.match(pattern)) {
+                        return true;
+                    }
+                    return 'Role names must be non empty and can only contain numbers, letters, and "_"';
+                }
             });
         }
         prompts.push({
@@ -84,11 +95,8 @@ module.exports = _yeoman.Base.extend({
      * Generates target file names.
      */
     generateTargetFileNames: function() {
-        const templateFile = _decamelize(this.props.roleName)
-                                .replace(/_/g, '-');
-        const roleSuffix = templateFile.endsWith('-role')?'':'-role';
-
-        this.props.roleTemplateFile = `${templateFile}${roleSuffix}`;
+        this.props.roleTemplateFile = _decamelize(this.props.roleName)
+                                        .replace(/_/g, '-');
     },
 
     /**
