@@ -47,7 +47,11 @@ module.exports = _yeoman.Base.extend({
             type: 'input',
             name: 'apiAuthorizerName',
             message: 'Authorizer Name?',
-            default: 'default',
+            default: 'default_authorizer',
+            filter: (response) => {
+                const suffix = response.endsWith('_authorizer')?'':'_authorizer';
+                return `${response}${suffix}`;
+            },
             validate: (response) => {
                 const pattern = /^[a-zA-Z0-9_]+$/;
                 if(response.match(pattern)) {
@@ -89,12 +93,8 @@ module.exports = _yeoman.Base.extend({
      * Generates target file names.
      */
     generateTargetFileNames: function() {
-        const authorizerFile = _decamelize(this.props.apiAuthorizerName)
-                                .replace(/_/g, '-');
-
-        this.props.apiAuthorizerTemplate = `${authorizerFile}-authorizer`;
-
-        this.log(this.props);
+        this.props.apiAuthorizerFile = _decamelize(this.props.apiAuthorizerName)
+                                            .replace(/_/g, '-');
     },
 
     /**
@@ -103,7 +103,7 @@ module.exports = _yeoman.Base.extend({
     createAuthorizerTemplate: function() {
         this.fs.copyTpl(
             this.templatePath(`resources/api/authorizer.js`),
-            this.destinationPath(`resources/api/${this.props.apiAuthorizerTemplate}.js`),
+            this.destinationPath(`resources/api/${this.props.apiAuthorizerFile}.js`),
             this.props
         );
     }
