@@ -10,10 +10,6 @@ module.exports = _yeoman.Base.extend({
      * Display completed message with future actions.
      */
     finish: function() {
-        const red = _chalk.red;
-        const yellow = _chalk.yellow;
-        const blue = _chalk.blue;
-
         const yo = _chalk.green('yo');
         const roleSubGen = _chalk.yellow(`${_consts.GENERATOR_NAME}:${_consts.SUB_GEN_ROLE}`);
         const tableSubGen = _chalk.yellow(`${_consts.GENERATOR_NAME}:${_consts.SUB_GEN_TABLE}`);
