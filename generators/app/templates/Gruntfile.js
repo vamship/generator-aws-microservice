@@ -330,6 +330,10 @@ module.exports = function(grunt) {
         generate_cf_template: {
             options: {
                 tokens: {
+                    // TODO: Review and update as necessary.
+                    // lambda_invoke_role: '<%= projectPrefix %>-api_gateway_role',
+                    // s3_invoke_role: '<%= projectPrefix %>-api_gateway_role',
+                    cors_origin: '\'*\''
                 },
                 output: {
                     dir: DIST.getPath()
