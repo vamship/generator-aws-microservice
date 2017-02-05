@@ -22,7 +22,8 @@ module.exports = _yeoman.Base.extend({
      */
     showTitle: function() {
         this.log(_consts.SEPARATOR);
-        this.log('Trigger an event from a DynamoDB stream:\n');
+        this.log('Trigger an event from a DynamoDB stream:');
+        this.log();
     },
 
     /**

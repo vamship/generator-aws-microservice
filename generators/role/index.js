@@ -22,17 +22,15 @@ module.exports = _yeoman.Base.extend({
         const title = this.options.title || 'Create a new IAM Role:';
         this.log(title);
         if(this.options.roleName) {
-            this.log(` Role name: ${this.options.roleName}\n`);
-        } else {
-            this.log();
+            this.log(` Role name: ${this.options.roleName}`);
         }
+        this.log();
     },
 
    /**
     * Gathers role information
     */
     gatherRoleInfo: function () {
-        this.log(_consts.SEPARATOR);
         this.props = this.props || {};
         this.props.roleName = this.options.roleName;
         this.props.roleAssumedBy = this.options.roleAssumedBy;

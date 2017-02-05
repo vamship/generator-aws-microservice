@@ -20,7 +20,8 @@ module.exports = _yeoman.Base.extend({
      */
     showTitle: function() {
         this.log(_consts.SEPARATOR);
-        this.log('Create lambda function handler:\n');
+        this.log('Create lambda function handler:');
+        this.log();
     },
 
     /**

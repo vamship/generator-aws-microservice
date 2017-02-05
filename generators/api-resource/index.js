@@ -39,6 +39,7 @@ module.exports = _yeoman.Base.extend({
     showTitle: function() {
         this.log(_consts.SEPARATOR);
         this.log('Create a REST API Resource:\n');
+        this.log();
     },
 
     /**
@@ -48,13 +49,13 @@ module.exports = _yeoman.Base.extend({
         const prompts = [{
             type: 'list',
             name: 'apiParentResource',
-            message: 'Parent resource?',
+            message: 'Choose a parent resource for the new resource',
             choices: this.availableResources,
             default: 0
         }, {
             type: 'input',
             name: 'apiResourcePath',
-            message: 'Resource Path (ex: user/:userId)?',
+            message: 'Resource path (ex: user/:userId)?',
             default: EMPTY_RESOURCE,
             filter: resp => resp === EMPTY_RESOURCE? '':resp,
             validate: (response) => {
@@ -72,7 +73,7 @@ module.exports = _yeoman.Base.extend({
         }, {
             type: 'checkbox',
             name: 'apiCorsMethods',
-            message: 'CORS Methods?',
+            message: 'CORS methods?',
             choices: ['GET', 'POST', 'PUT', 'DELETE'],
             default: [ 'GET', 'POST' ],
             when: answers => answers.apiEnableCors,

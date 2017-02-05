@@ -1,5 +1,5 @@
 {
-    "SEPARATOR": "----------------------------------------",
+    "SEPARATOR": "--------------------------------------------------------------------------------",
     "GENERATOR_NAME": "aws-microservice",
     "SUB_GEN_LAMBDA": "function",
     "SUB_GEN_TABLE": "table",

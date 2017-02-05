@@ -20,7 +20,8 @@ module.exports = _yeoman.Base.extend({
      */
     showTitle: function() {
         this.log(_consts.SEPARATOR);
-        this.log('Create an Authorizer to authorize API gateway requests');
+        this.log('Create an Authorizer to authorize API gateway requests:');
+        this.log();
     },
 
     /**
@@ -46,7 +47,7 @@ module.exports = _yeoman.Base.extend({
         const prompts = [{
             type: 'input',
             name: 'apiAuthorizerName',
-            message: 'Authorizer Name?',
+            message: 'Authorizer name?',
             default: 'default_authorizer',
             filter: (response) => {
                 const suffix = response.endsWith('_authorizer')?'':'_authorizer';
@@ -62,7 +63,7 @@ module.exports = _yeoman.Base.extend({
         }, {
             type: 'list',
             name: 'apiAuthorizerType',
-            message: 'Authorizer Type?',
+            message: 'Authorizer type?',
             choices: ['COGNITO', 'CUSTOM'],
             default: 0,
             validate: (response) => {
@@ -75,7 +76,7 @@ module.exports = _yeoman.Base.extend({
         }, {
             type: 'list',
             name: 'apiAuthorizerLambda',
-            message: 'Handler Lambda?',
+            message: 'Handler lambda?',
             when: answers => answers.apiAuthorizerType === 'CUSTOM',
             choices: this.availableLambdas,
             default: 0

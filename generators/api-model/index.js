@@ -20,6 +20,7 @@ module.exports = _yeoman.Base.extend({
         const title = this.options.apiModelTitle || 'Create a model for a REST request/response';
         this.log(_consts.SEPARATOR);
         this.log(title);
+        this.log();
     },
 
     /**
@@ -32,7 +33,7 @@ module.exports = _yeoman.Base.extend({
         const prompts = [{
             type: 'input',
             name: 'apiModelName',
-            message: 'Model Name (ex: CreateUserRequest)?',
+            message: 'Model name (ex: CreateUserRequest)?',
             validate: (response) => {
                 const pattern = /^[a-zA-Z0-9]+$/;
                 if(response.match(pattern)) {
@@ -44,7 +45,7 @@ module.exports = _yeoman.Base.extend({
         }, {
             type: 'input',
             name: 'apiModelDescription',
-            message: 'Model Description?',
+            message: 'Model description?',
             when: answers => !this.props.apiModelDescription
         }];
 

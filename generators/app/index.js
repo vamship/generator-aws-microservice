@@ -26,17 +26,17 @@ module.exports = _yeoman.Base.extend({
                 const prompts = [{
                     type: 'input',
                     name: 'apiName',
-                    message: 'API Name?',
+                    message: 'API name?',
                     default: answers => `${modifiedProjectName} API`
                 }, {
                     type: 'input',
                     name: 'apiDescription',
-                    message: 'API Description?',
+                    message: 'API description?',
                     default: answers => `API for the ${modifiedProjectName} microservice`
                 }];
                 return this.prompt(prompts).then((props) => {
-                    this.props = Object.assign(this.props || {}, props);
                     this.log(_consts.SEPARATOR);
+                    this.props = Object.assign(this.props || {}, props);
                 });
              }).then(() => { return _prompts.getAuthorInfo(this, true); })
             .then(() => { return _prompts.getAwsInfo(this, true); });

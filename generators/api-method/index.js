@@ -24,6 +24,7 @@ module.exports = _yeoman.Base.extend({
     showTitle: function() {
         this.log(_consts.SEPARATOR);
         this.log('Create a REST API method:\n');
+        this.log();
     },
 
     /**
@@ -120,25 +121,25 @@ module.exports = _yeoman.Base.extend({
         const prompts = [{
             type: 'list',
             name: 'apiMethodResource',
-            message: 'Method Resource?',
+            message: 'Choose a resource to create the method under',
             choices: this.availableResources,
             default: 0
         }, {
             type: 'list',
             name: 'apiMethodVerb',
-            message: 'HTTP Verb?',
+            message: 'HTTP action?',
             choices: [ 'GET', 'POST', 'PUT', 'DELETE' ],
             default: 0
         }, {
             type: 'list',
             name: 'apiMethodAuthorizer',
-            message: 'Method Authorization?',
+            message: 'Choose an authorizer to secure the method',
             choices: this.availableAuthorizers,
             default: 0
         }, {
             type: 'list',
             name: 'apiMethodAuthorizerType',
-            message: 'Authorizer Type?',
+            message: 'Authorizer type?',
             choices: [ 'COGNITO_USER_POOLS', 'CUSTOM' ],
             default: 0,
             when: answers => answers.apiMethodAuthorizer !== 'NONE'
@@ -150,7 +151,7 @@ module.exports = _yeoman.Base.extend({
         }, {
             type: 'list',
             name: 'apiMethodBackendType',
-            message: 'Method Backend Type?',
+            message: 'Select a back end integration for the method?',
             choices: ['MOCK', 'S3', 'LAMBDA'],
             default: 2,
             validate: (response) => {
@@ -163,14 +164,14 @@ module.exports = _yeoman.Base.extend({
         }, {
             type: 'list',
             name: 'apiMethodLambda',
-            message: 'Handler Lambda?',
+            message: 'Select the lambda that will handle the request',
             when: answers => answers.apiMethodBackendType === 'LAMBDA',
             choices: this.availableLambdas,
             default: 0
         }, {
             type: 'input',
             name: 'apiMethodS3Path',
-            message: 'S3 Path?',
+            message: 'Specify an S3 integration path',
             when: answers => answers.apiMethodBackendType === 'S3',
             validate: (response) => {
                 const pattern = /^(\/({[a-zA-Z0-9\._-]+}|[a-zA-Z0-9\._-]+))+$/;
@@ -182,26 +183,26 @@ module.exports = _yeoman.Base.extend({
         }, {
             type: 'list',
             name: 'apiMethodRequestModel',
-            message: 'Request Model?',
+            message: 'Select a model that defines the method request',
             choices: this.availableModels,
             default: 0
         }, {
             type: 'input',
             name: 'apiMethodRequestModelName',
-            message: 'New Request Model Name (ex: CreateUserRequest)?',
+            message: 'New request model name (ex: CreateUserRequest)?',
             when: answers => answers.apiMethodRequestModel === 'CREATE NEW',
             default: '',
             validate: modelNameValidator
         }, {
             type: 'list',
             name: 'apiMethodResponseModel',
-            message: 'Response Model?',
+            message: 'Select a model that defines the method response',
             choices: this.availableModels,
             default: 0
         }, {
             type: 'input',
             name: 'apiMethodResponseModelName',
-            message: 'New Response Model Name (ex: CreateUserRequest)?',
+            message: 'New response model name (ex: CreateUserRequest)?',
             when: answers => answers.apiMethodResponseModel === 'CREATE NEW',
             default: '',
             validate: modelNameValidator

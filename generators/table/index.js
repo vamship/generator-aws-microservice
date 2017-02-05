@@ -122,7 +122,8 @@ module.exports = _yeoman.Base.extend({
      */
     showTitle: function() {
         this.log(_consts.SEPARATOR);
-        this.log('Create DynamoDB table:\n');
+        this.log('Create DynamoDB table:');
+        this.log();
     },
 
    /**
