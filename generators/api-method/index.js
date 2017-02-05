@@ -173,11 +173,11 @@ module.exports = _yeoman.Base.extend({
             message: 'S3 Path?',
             when: answers => answers.apiMethodBackendType === 'S3',
             validate: (response) => {
-                const pattern = /^(\/({[a-zA-Z0-9_-]+}|[a-zA-Z0-9_-]+))+$/;
+                const pattern = /^(\/({[a-zA-Z0-9\._-]+}|[a-zA-Z0-9\._-]+))+$/;
                 if(response.match(pattern)) {
                     return true;
                 }
-                return 'Resource name can only contain letters, numbers, "_" and "-".\n  Parameterized resource paths should be surrounded by "{}"';
+                return 'Resource name can only contain letters, numbers, "_", "-" and ".".\n  Parameterized resource paths should be surrounded by "{}"';
             }
         }, {
             type: 'list',

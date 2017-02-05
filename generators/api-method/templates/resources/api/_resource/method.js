@@ -16,14 +16,12 @@ module.exports = (dirInfo) => {
     const responseModelKey = dirInfo.getNamespacedToken('api_model', responseModel);
 <% } -%>
 
-<% if(apiMethodAuthorizer === 'NONE') { -%>
-    const authorizerId = false;
-    const authorizerType = null;
-<% } else { -%>
+<% if(apiMethodAuthorizer !== 'NONE') { -%>
     const authorizerId = dirInfo.getNamespacedToken('api_authorizer', '<%= apiMethodAuthorizer %>');
     const authorizerType = '<%= apiMethodAuthorizerType %>';
 <% } -%>
 
+<% if(apiMethodBackendType !== 'S3') { -%>
     //TODO: This request template must be filled out with an appropriate mapping
     //of the HTTP request to the parameters required by the back end.
     const requestTemplate = `{
@@ -38,6 +36,7 @@ ${_mappingHelper.mapUserFromJwt({
     })}
 <% } -%>
 }`;
+<% } %>
 
     //TODO: This request template must be filled out with an appropriate mapping
     //of the HTTP response to the response  required by teh caller
@@ -49,18 +48,24 @@ ${_mappingHelper.mapUserFromJwt({
         .setResource(dirInfo)
 <% } -%>
         .setHttpMethod(method)
+<% if(apiMethodAuthorizer === 'NONE') { -%>
+        .setAuthorizer(false)
+<% } else { -%>
         .setAuthorizer(`<%% ${authorizerId} %%>`, authorizerType)
+<% } -%>
 <% if(apiMethodBackendType === 'MOCK') { -%>
         .setMockBackend()
 <% } else if(apiMethodBackendType === 'LAMBDA') { -%>
         .setBackendLambda('<%= apiMethodLambda %>')
 <% } else if(apiMethodBackendType === 'S3') { -%>
-        .setBackendS3('<%= apiMethodS3Path %>')
+        .setBackendS3('<%= apiMethodS3Path %>', method)
 <% } -%>
 <% if(apiMethodAuthorizer !== 'NONE') { -%>
         .setRequestHeader('Authorization', true)
 <% } -%>
+<% if(apiMethodBackendType !== 'S3') { -%>
         .setRequestTemplate(requestTemplate, 'application/json')
+<% } -%>
 <% if(apiMethodRequestModelName.length > 0) { -%>
         .setRequestModel(requestModel)
 <% } else { -%>
