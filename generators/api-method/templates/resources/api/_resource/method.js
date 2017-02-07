@@ -17,6 +17,7 @@ module.exports = (dirInfo) => {
 <% } -%>
 
 <% if(apiMethodAuthorizer !== 'NONE') { -%>
+
     const authorizerId = dirInfo.getNamespacedToken('api_authorizer', '<%= apiMethodAuthorizer %>');
     const authorizerType = '<%= apiMethodAuthorizerType %>';
 <% } -%>
@@ -36,8 +37,8 @@ ${_mappingHelper.mapUserFromJwt({
     })}
 <% } -%>
 }`;
-<% } %>
 
+<% } %>
     //TODO: This request template must be filled out with an appropriate mapping
     //of the HTTP response to the response  required by teh caller
     const responseTemplate = `$input.json('$')`;
