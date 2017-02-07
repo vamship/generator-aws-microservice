@@ -11,7 +11,7 @@ module.exports = (dirInfo) => {
     const environments = [<%- projectTargetEnvironments.map(item => `'${item}'`).join(', ') %>];
 
     return _lambdaConfig.lambdas.map((lambda) => {
-        const roleName = '<%= projectPrefix %>-default_lambda_role';
+        const roleName = '<%= projectPrefix %>-lambda_role';
         const roleKey = dirInfo.getNamespacedToken('iam_role', roleName);
 
         const functionName = lambda.functionName;
