@@ -15,14 +15,13 @@ module.exports = (dirInfo) => {
     const responseModel = '<%= apiMethodResponseModelName %>';
     const responseModelKey = dirInfo.getNamespacedToken('api_model', responseModel);
 <% } -%>
-
 <% if(apiMethodAuthorizer !== 'NONE') { -%>
 
     const authorizerId = dirInfo.getNamespacedToken('api_authorizer', '<%= apiMethodAuthorizer %>');
     const authorizerType = '<%= apiMethodAuthorizerType %>';
 <% } -%>
-
 <% if(apiMethodBackendType !== 'S3') { -%>
+
     //TODO: This request template must be filled out with an appropriate mapping
     //of the HTTP request to the parameters required by the back end.
     const requestTemplate = `{
@@ -37,8 +36,8 @@ ${_mappingHelper.mapUserFromJwt({
     })}
 <% } -%>
 }`;
+<% } -%>
 
-<% } %>
     //TODO: This request template must be filled out with an appropriate mapping
     //of the HTTP response to the response  required by teh caller
     const responseTemplate = `$input.json('$')`;
@@ -47,6 +46,12 @@ ${_mappingHelper.mapUserFromJwt({
         .setRestApiId(dirInfo)
 <% if(apiMethodResource !== '/') { -%>
         .setResource(dirInfo)
+
+        //TODO: If the request path has any dynamic elements to it
+        //(ex: /users/{userId}), request path parameters have to be set
+        //appropriately (see example below).
+        // .setRequestPath('PATH_ELEMENT', true)
+
 <% } -%>
         .setHttpMethod(method)
 <% if(apiMethodAuthorizer === 'NONE') { -%>
@@ -60,6 +65,12 @@ ${_mappingHelper.mapUserFromJwt({
         .setBackendLambda('<%= apiMethodLambda %>')
 <% } else if(apiMethodBackendType === 'S3') { -%>
         .setBackendS3('<%= apiMethodS3Path %>', method)
+<% apiMethodS3Path.split('/')
+    .filter(token => /{[a-zA-Z0-9\._-]+}/.test(token))
+    .map(token => token.substring(1, token.length - 1))
+    .forEach((token) => { -%>
+        .mapBackEndRequestPath('<%= token %>', '<%= token %>')
+<% }) -%>
 <% } -%>
 <% if(apiMethodAuthorizer !== 'NONE') { -%>
         .setRequestHeader('Authorization', true)
@@ -72,13 +83,21 @@ ${_mappingHelper.mapUserFromJwt({
 <% } else { -%>
         .setRequestModel('Empty')
 <% } -%>
+<% if(apiMethodBackendType === 'S3') { -%>
+        .setBinaryIntegrationResponses()
+<% } else { -%>
         .setDefaultIntegrationResponses()
+<% } -%>
 <% if(typeof apiMethodEnableCors) { -%>
         .setResponseHeader('Access-Control-Allow-Origin', '<%% cors_origin %%>')
 <% } -%>
+<% if(apiMethodBackendType !== 'S3') { -%>
         .setResponseTemplate(responseTemplate, 'application/json', '200')
+<% } -%>
 <% if(apiMethodResponseModelName.length > 0) { -%>
         .setResponseModel(responseModel, 'application/json', '200')
+<% } else if(apiMethodBackendType === 'S3') { -%>
+        .setResponseModel('Empty', 'application/octet-stream', '200')
 <% } else { -%>
         .setResponseModel('Empty', 'application/json', '200')
 <% } -%>
