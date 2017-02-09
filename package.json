@@ -1,6 +1,6 @@
 {
   "name": "generator-aws-microservice",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Generates a sample project for a collection of AWS lambda functions along with optional cloud formation templates for resource generation",
   "homepage": "",
   "author": {
