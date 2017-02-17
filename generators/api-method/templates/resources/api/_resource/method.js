@@ -5,7 +5,7 @@ const MethodTemplate = ApiGatewayTemplates.MethodTemplate;
 const _mappingHelper = ApiGatewayTemplates.mappingTemplateHelper;
 
 module.exports = (dirInfo) => {
-    const method = 'GET';
+    const method = '<%= apiMethodVerb %>';
     const methodKey = dirInfo.getToken(method);
 <% if(apiMethodRequestModelName.length > 0) { -%>
     const requestModel = '<%= apiMethodRequestModelName %>';
@@ -46,12 +46,6 @@ ${_mappingHelper.mapUserFromJwt({
         .setRestApiId(dirInfo)
 <% if(apiMethodResource !== '/') { -%>
         .setResource(dirInfo)
-
-        //TODO: If the request path has any dynamic elements to it
-        //(ex: /users/{userId}), request path parameters have to be set
-        //appropriately (see example below).
-        // .setRequestPath('PATH_ELEMENT', true)
-
 <% } -%>
         .setHttpMethod(method)
 <% if(apiMethodAuthorizer === 'NONE') { -%>
@@ -71,6 +65,9 @@ ${_mappingHelper.mapUserFromJwt({
     .forEach((token) => { -%>
         .mapBackEndRequestPath('<%= token %>', '<%= token %>')
 <% }) -%>
+<% } -%>
+<% if(apiMethodResource !== '/') { -%>
+        // .setRequestPath('userId', true) //TODO: Add references to dynamic path elements (ex: /users/{userId})
 <% } -%>
 <% if(apiMethodAuthorizer !== 'NONE') { -%>
         .setRequestHeader('Authorization', true)
