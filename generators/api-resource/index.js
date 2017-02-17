@@ -25,7 +25,11 @@ module.exports = _yeoman.Base.extend({
         const path = this.destinationPath('resources/api');
         _fsUtils.getSubDirectoryPaths(path).then((dirList) => {
             const pathRegex = new RegExp(`${path}/?`);
-            this.availableResources = dirList.map(item => item.replace(pathRegex, '/'));
+            this.availableResources = dirList.map((item) => {
+                return item.replace(/^[a-zA-Z]*:/,'')  // Handle windows drive letter
+                            .replace(/\\/g, '/')       // Handle windows path separator
+                            .replace(pathRegex, '/');
+            });
             done();
         }).catch((ex) => {
             this.env.error('Error listing existing API resources');

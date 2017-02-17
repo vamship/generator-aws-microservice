@@ -39,7 +39,9 @@ module.exports = _yeoman.Base.extend({
             this.availableResources = dirList.filter((item) => {
                 return !item.match(/\/_models$/);
             }).map((item) => {
-                return item.replace(pathRegex, '/');
+                return item.replace(/^[a-zA-Z]*:/,'')  // Handle windows drive letter
+                            .replace(/\\/g, '/')       // Handle windows path separator
+                            .replace(pathRegex, '/');
             });
             done();
         }).catch((ex) => {
