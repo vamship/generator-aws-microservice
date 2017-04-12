@@ -97,12 +97,11 @@ module.exports = _yeoman.Base.extend({
         if(this.props.lambdaDescription) {
             lambdaDefinition.description = this.props.lambdaDescription;
         }
-        if(this.props.lambdaMemory) {
-            lambdaDefinition.memory = this.props.lambdaMemory;
-        }
-        if(this.props.lambdaTimeout) {
-            lambdaDefinition.timeout = this.props.lambdaTimeout;
-        }
+        const lambdaMemory = parseInt(this.props.lambdaMemory);
+        lambdaDefinition.memory = !isNaN(lambdaMemory)? lambdaMemory: 128;
+
+        const lambdaTimeout = parseInt(this.props.lambdaTimeout);
+        lambdaDefinition.timeout = !isNaN(lambdaTimeout)? lambdaTimeout: 3;
 
         const definitionExists = lambdaConfig.lambdas.find((definition) => {
             return definition.functionName === lambdaDefinition.functionName;
