@@ -49,6 +49,7 @@ module.exports = _yeoman.Base.extend({
         [
             'package.json',
             'Gruntfile.js',
+            'buildspec.yml',
             'README.md',
             '_gitignore',
             '_npmignore',
