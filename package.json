@@ -20,12 +20,12 @@
     "yeoman-generator"
   ],
   "dependencies": {
-    "pascalcase": "^0.1.1",
     "bluebird": "^3.4.7",
     "camelcase": "^4.0.0",
     "chalk": "^1.0.0",
     "decamelize": "^1.2.0",
-    "yeoman-generator": "^0.23.0",
+    "pascalcase": "^0.1.1",
+    "yeoman-generator": "^1.1.1",
     "yosay": "^1.0.0"
   },
   "devDependencies": {

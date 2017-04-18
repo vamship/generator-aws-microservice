@@ -1,6 +1,6 @@
 'use strict';
 
-const _yeoman = require('yeoman-generator');
+const Generator = require('yeoman-generator');
 const _chalk = require('chalk');
 const _yosay = require('yosay');
 
@@ -8,11 +8,18 @@ const _prompts = require('../../utils/prompts');
 const _consts = require('../../utils/constants');
 const _package = require('../../package.json');
 
-module.exports = _yeoman.Base.extend({
+module.exports = class extends Generator {
+    /**
+     * Initializes the generator.
+     */
+    constructor(args, opts) {
+        super(args, opts);
+    }
+    
    /**
     * Gather basic project information.
     */
-    gatherProjectInfo: function () {
+    gatherProjectInfo() {
         const generatorTitle = `${_consts.GENERATOR_NAME} v${_package.version}`;
         this.log(_yosay(
             `AWS Microservice Generator.\n${_chalk.red(generatorTitle)} `
@@ -40,12 +47,12 @@ module.exports = _yeoman.Base.extend({
                 });
              }).then(() => { return _prompts.getAuthorInfo(this, true); })
             .then(() => { return _prompts.getAwsInfo(this, true); });
-    },
+    }
 
     /**
      * Creates project files
      */
-    createProjectFiles: function () {
+    createProjectFiles() {
         [
             'package.json',
             'Gruntfile.js',
@@ -75,12 +82,12 @@ module.exports = _yeoman.Base.extend({
                 this.props
             );
         });
-    },
+    }
 
     /**
      * Finish the rest of the main flow by composing sub generators.
      */
-    compose: function () {
+    compose() {
         this.composeWith(`${_consts.GENERATOR_NAME}:${_consts.SUB_GEN_LAMBDA}`);
         this.composeWith(`${_consts.GENERATOR_NAME}:${_consts.SUB_GEN_ROLE}`, {
             options: {
@@ -101,4 +108,4 @@ module.exports = _yeoman.Base.extend({
         // this.composeWith(`${_consts.GENERATOR_NAME}:${_consts.SUB_GEN_TABLE}`);
         this.composeWith(`${_consts.GENERATOR_NAME}:${_consts.SUB_GEN_FINISH}`);
     }
-});
+}

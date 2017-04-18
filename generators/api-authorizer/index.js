@@ -1,34 +1,34 @@
 'use strict';
 
-const _yeoman = require('yeoman-generator');
+const Generator = require('yeoman-generator');
 const _decamelize = require('decamelize');
 
 const _prompts = require('../../utils/prompts');
 const _consts = require('../../utils/constants');
 
-module.exports = _yeoman.Base.extend({
+module.exports = class extends Generator {
     /**
      * Initializes the generator.
      */
-    constructor: function() {
-        _yeoman.Base.apply(this, arguments);
+    constructor(args, opts) {
+        super(args, opts);
         this.availableLambdas = null;
-    },
+    }
 
     /**
      * Shows a the title of the sub generator, and a brief description.
      */
-    showTitle: function() {
+    showTitle() {
         this.log(_consts.SEPARATOR);
         this.log('Create an Authorizer to authorize API gateway requests:');
         this.log();
-    },
+    }
 
     /**
      * Queries the project to identify all defined lambda functions that can
      * serve as custom authorizer handlers.
      */
-    lookupAvailableLambdas: function() {
+    lookupAvailableLambdas() {
         const lambdaConfig = this.fs.readJSON(
             this.destinationPath('src/lambda-config.json'), {
                 lambdas: []
@@ -37,12 +37,12 @@ module.exports = _yeoman.Base.extend({
         this.availableLambdas = lambdaConfig.lambdas.map((lambda) => {
             return lambda.functionName;
         });
-    },
+    }
 
     /**
      * Gathers authorizer information
      */
-    gatherAuthorizerInfo: function () {
+    gatherAuthorizerInfo() {
         this.props = this.props || {};
         const prompts = [{
             type: 'input',
@@ -88,24 +88,24 @@ module.exports = _yeoman.Base.extend({
                     this.props = Object.assign(this.props || {}, props);
                 });
             });
-    },
+    }
 
     /**
      * Generates target file names.
      */
-    generateTargetFileNames: function() {
+    generateTargetFileNames() {
         this.props.apiAuthorizerFile = _decamelize(this.props.apiAuthorizerName)
                                             .replace(/_/g, '-');
-    },
+    }
 
     /**
      * Creates cloud formation template for the api authorizer
      */
-    createAuthorizerTemplate: function() {
+    createAuthorizerTemplate() {
         this.fs.copyTpl(
             this.templatePath(`resources/api/authorizer.js`),
             this.destinationPath(`resources/api/${this.props.apiAuthorizerFile}.js`),
             this.props
         );
     }
-});
+}

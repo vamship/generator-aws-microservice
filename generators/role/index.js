@@ -1,23 +1,23 @@
 'use strict';
 
-const _yeoman = require('yeoman-generator');
+const Generator = require('yeoman-generator');
 const _prompts = require('../../utils/prompts');
 const _decamelize = require('decamelize');
 
 const _consts = require('../../utils/constants');
 
-module.exports = _yeoman.Base.extend({
+module.exports = class extends Generator {
     /**
      * Initializes the generator.
      */
-    constructor: function() {
-        _yeoman.Base.apply(this, arguments);
-    },
+    constructor(args, opts) {
+        super(args, opts);
+    }
 
     /**
      * Shows a the title of the sub generator, and a brief description.
      */
-    showTitle: function() {
+    showTitle() {
         this.log(_consts.SEPARATOR);
         const title = this.options.title || 'Create a new IAM Role:';
         this.log(title);
@@ -25,12 +25,12 @@ module.exports = _yeoman.Base.extend({
             this.log(` Role name: ${this.options.roleName}`);
         }
         this.log();
-    },
+    }
 
    /**
     * Gathers role information
     */
-    gatherRoleInfo: function () {
+    gatherRoleInfo() {
         this.props = this.props || {};
         this.props.roleName = this.options.roleName;
         this.props.roleAssumedBy = this.options.roleAssumedBy;
@@ -116,24 +116,24 @@ module.exports = _yeoman.Base.extend({
                     this.props = Object.assign(this.props || {}, props);
                 });
             });
-    },
+    }
 
     /**
      * Generates target file names.
      */
-    generateTargetFileNames: function() {
+    generateTargetFileNames() {
         this.props.roleTemplateFile = _decamelize(this.props.roleName)
                                         .replace(/_/g, '-');
-    },
+    }
 
     /**
      * Creates cloud formation template for the lambda role.
      */
-    createRoleTemplate: function() {
+    createRoleTemplate() {
         this.fs.copyTpl(
             this.templatePath(`resources/core/iam/role.js`),
             this.destinationPath(`resources/core/iam/${this.props.roleTemplateFile}.js`),
             this.props
         );
     }
-});
+}

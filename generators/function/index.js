@@ -1,33 +1,33 @@
 'use strict';
 
-const _yeoman = require('yeoman-generator');
+const Generator = require('yeoman-generator');
 const _camelCase = require('camelcase');
 const _decamelize = require('decamelize');
 
 const _prompts = require('../../utils/prompts');
 const _consts = require('../../utils/constants');
 
-module.exports = _yeoman.Base.extend({
+module.exports = class extends Generator {
     /**
      * Initializes the generator.
      */
-    constructor: function() {
-        _yeoman.Base.apply(this, arguments);
-    },
+    constructor(args, opts) {
+        super(args, opts);
+    }
 
     /**
      * Shows a the title of the sub generator, and a brief description.
      */
-    showTitle: function() {
+    showTitle() {
         this.log(_consts.SEPARATOR);
         this.log('Create lambda function handler:');
         this.log();
-    },
+    }
 
     /**
      * Gathers lambda function information.
      */
-    gatherLambdaInfo: function () {
+    gatherLambdaInfo() {
         const prompts = [{
             type: 'input',
             name: 'lambdaFunctionName',
@@ -65,24 +65,24 @@ module.exports = _yeoman.Base.extend({
                     this.props = Object.assign(this.props || {}, props);
                 });
             });
-    },
+    }
 
     /**
      * Generates target file names.
      */
-    generateTargetFileNames: function() {
+    generateTargetFileNames() {
         const handlerFile = _decamelize(this.props.lambdaFunctionName)
                                 .replace(/_/g, '-');
 
         this.props.lambdaHandlerFile = `${handlerFile}-handler`;
         this.props.lambdaSchemaFile = `${handlerFile}-schema`;
         this.props.lambdaSpecFile = `${handlerFile}-handler-spec`;
-    },
+    }
 
     /**
      * Creates the definition for a lambda function.
      */
-     createLambdaDefinition: function() {
+     createLambdaDefinition() {
         const lambdaConfig = this.fs.readJSON(
             this.destinationPath('src/lambda-config.json'), {
                 lambdas: []
@@ -120,7 +120,7 @@ module.exports = _yeoman.Base.extend({
             null,
             4
         );
-     },
+     }
 
     /**
      * Creates the necessary files for the lambda function including a
@@ -145,4 +145,4 @@ module.exports = _yeoman.Base.extend({
              this.props
          );
      }
-});
+}

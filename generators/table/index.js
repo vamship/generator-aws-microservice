@@ -1,17 +1,17 @@
 'use strict';
 
-const _yeoman = require('yeoman-generator');
+const Generator = require('yeoman-generator');
 const _prompts = require('../../utils/prompts');
 const _decamelize = require('decamelize');
 
 const _consts = require('../../utils/constants');
 
-module.exports = _yeoman.Base.extend({
+module.exports = class extends Generator {
     /**
      * Initializes the generator.
      */
-    constructor: function() {
-        _yeoman.Base.apply(this, arguments);
+    constructor(args, opts) {
+        super(args, opts);
 
         this._gatherIndexInfo = (isGlobal) => {
             isGlobal = !!isGlobal;
@@ -115,21 +115,21 @@ module.exports = _yeoman.Base.extend({
                 return false;
             });
         };
-    },
+    }
 
     /**
      * Shows a the title of the sub generator, and a brief description.
      */
-    showTitle: function() {
+    showTitle() {
         this.log(_consts.SEPARATOR);
         this.log('Create DynamoDB table:');
         this.log();
-    },
+    }
 
    /**
     * Gathers basic table information
     */
-    gatherTableInfo: function () {
+    gatherTableInfo() {
         const prompts = [{
             type: 'input',
             name: 'tableName',
@@ -182,45 +182,45 @@ module.exports = _yeoman.Base.extend({
                     this.log(_consts.SEPARATOR);
                 });
             });
-    },
+    }
 
    /**
     * Gathers local secondary index info
     */
-    gatherLSIInfo: function () {
+    gatherLSIInfo() {
         return this._gatherIndexInfo(false).then((repeat) => {
             if(repeat) {
                 return this.gatherLSIInfo();
             }
             this.log(_consts.SEPARATOR);
         });
-    },
+    }
 
    /**
     * Gathers global secondary index info
     */
-    gatherGSIInfo: function () {
+    gatherGSIInfo() {
         return this._gatherIndexInfo(true).then((repeat) => {
             if(repeat) {
                 return this.gatherGSIInfo();
             }
         });
-    },
+    }
 
     /**
      * Generates target file names.
      */
-    generateTargetFileNames: function() {
+    generateTargetFileNames() {
         const templateFile = _decamelize(this.props.tableName)
                                 .replace(/_/g, '-');
 
         this.props.tableTemplateFile = `${templateFile}-table`;
-    },
+    }
 
     /**
      * Creates cloud formation template for the dynamo db table.
      */
-    createTableTemplate: function() {
+    createTableTemplate() {
         this.props.projectTargetEnvironments.forEach((envStr) => {
             const props = Object.assign({}, this.props, {
                 envStr: envStr
@@ -232,4 +232,4 @@ module.exports = _yeoman.Base.extend({
             );
         });
     }
-});
+}

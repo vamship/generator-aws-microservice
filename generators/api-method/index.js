@@ -1,37 +1,37 @@
 'use strict';
 
-const _yeoman = require('yeoman-generator');
+const Generator = require('yeoman-generator');
 const _pascalCase = require('pascalcase');
 
 const _fsUtils = require('../../utils/fs-utils');
 const _consts = require('../../utils/constants');
 
-module.exports = _yeoman.Base.extend({
+module.exports = class extends Generator {
     /**
      * Initializes the generator.
      */
-    constructor: function() {
-        _yeoman.Base.apply(this, arguments);
+    constructor(args, opts) {
+        super(args, opts);
         this.availableResources = ['/'];
         this.availableAuthorizers = ['NONE'];
         this.availableLambdas = null;
         this.availableModels = ['NONE', 'CREATE NEW'];
-    },
+    }
 
     /**
      * Shows a the title of the sub generator, and a brief description.
      */
-    showTitle: function() {
+    showTitle() {
         this.log(_consts.SEPARATOR);
         this.log('Create a REST API method:\n');
         this.log();
-    },
+    }
 
     /**
      * Queries the project to identify all defined resources that can serve as
      * parent resources to a method.
      */
-    lookupAvailableResources: function() {
+    lookupAvailableResources() {
         const done = this.async();
         const path = this.destinationPath('resources/api');
         _fsUtils.getSubDirectoryPaths(path).then((dirList) => {
@@ -48,13 +48,13 @@ module.exports = _yeoman.Base.extend({
             this.env.error('Error listing existing API resources');
             done(ex);
         });
-    },
+    }
 
     /**
      * Queries the project to identify all defined authorizers that can be
      * attached to methods.
      */
-    lookupAvailableAuthorizers: function() {
+    lookupAvailableAuthorizers() {
         const done = this.async();
         const path = this.destinationPath('resources/api');
         const pattern = /-authorizer\.js$/;
@@ -68,13 +68,13 @@ module.exports = _yeoman.Base.extend({
         }).catch((ex) => {
             done(ex);
         });
-    },
+    }
 
     /**
      * Queries the project to identify all defined models that can be
      * attached to methods.
      */
-    lookupAvailableModels: function() {
+    lookupAvailableModels() {
         const done = this.async();
         const path = this.destinationPath('resources/api/_models');
         const pattern = /-model\.js$/;
@@ -92,13 +92,13 @@ module.exports = _yeoman.Base.extend({
             }
             done(ex);
         });
-    },
+    }
 
     /**
      * Queries the project to identify all defined lambda functions that can
      * serve as event handlers.
      */
-    lookupAvailableLambdas: function() {
+    lookupAvailableLambdas() {
         const lambdaConfig = this.fs.readJSON(
             this.destinationPath('src/lambda-config.json'), {
                 lambdas: []
@@ -107,12 +107,12 @@ module.exports = _yeoman.Base.extend({
         this.availableLambdas = lambdaConfig.lambdas.map((lambda) => {
             return lambda.functionName;
         });
-    },
+    }
 
     /**
      * Gathers resource information
      */
-    gatherResourceInfo: function () {
+    gatherResourceInfo() {
         const modelNameValidator = (response) => {
             const pattern = /^[a-zA-Z0-9]+$/;
             if(response === '' || response.match(pattern)) {
@@ -219,12 +219,12 @@ module.exports = _yeoman.Base.extend({
                 this.props.apiMethodResponseModelName = '';
             }
         });
-    },
+    }
 
     /**
      * Generate request/response models by composing sub generators.
      */
-    compose: function () {
+    compose() {
         if(this.props.apiMethodRequestModelName !== '') {
             this.composeWith(`${_consts.GENERATOR_NAME}:${_consts.SUB_GEN_API_MODEL}`, {
                 options: {
@@ -243,12 +243,12 @@ module.exports = _yeoman.Base.extend({
                 }
             });
         }
-    },
+    }
 
     /**
      * Creates cloud formation template for the api method
      */
-    createMethodTemplate: function() {
+    createMethodTemplate() {
         const methodFile = this.props.apiMethodVerb.toLowerCase();
         const resource = this.props.apiMethodResource === '/' ? '':this.props.apiMethodResource;
         this.fs.copyTpl(
@@ -256,7 +256,7 @@ module.exports = _yeoman.Base.extend({
             this.destinationPath(`resources/api${resource}/${methodFile}.js`),
             this.props
         );
-    },
+    }
 
     /**
      * Finish up and show user messae.
@@ -264,4 +264,4 @@ module.exports = _yeoman.Base.extend({
     finish() {
         this.log('A new API method will be created. You will have to update the request and response mappings within the template');
     }
-});
+}

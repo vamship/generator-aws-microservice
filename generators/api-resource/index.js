@@ -1,26 +1,26 @@
 'use strict';
 
-const _yeoman = require('yeoman-generator');
+const Generator = require('yeoman-generator');
 
 const _fsUtils = require('../../utils/fs-utils');
 const _consts = require('../../utils/constants');
 
 const EMPTY_RESOURCE = 'EMPTY (Create at parent level)';
 
-module.exports = _yeoman.Base.extend({
+module.exports = class extends Generator {
     /**
      * Initializes the generator.
      */
-    constructor: function() {
-        _yeoman.Base.apply(this, arguments);
+    constructor(args, opts) {
+        super(args, opts);
         this.availableResources = ['/'];
-    },
+    }
 
     /**
      * Queries the project to identify all defined resources that can serve as
      * parent resources to a resource.
      */
-    lookupAvailableResources: function() {
+    lookupAvailableResources() {
         const done = this.async();
         const path = this.destinationPath('resources/api');
         _fsUtils.getSubDirectoryPaths(path).then((dirList) => {
@@ -35,21 +35,21 @@ module.exports = _yeoman.Base.extend({
             this.env.error('Error listing existing API resources');
             done(ex);
         });
-    },
+    }
 
     /**
      * Shows a the title of the sub generator, and a brief description.
      */
-    showTitle: function() {
+    showTitle() {
         this.log(_consts.SEPARATOR);
         this.log('Create a REST API Resource:\n');
         this.log();
-    },
+    }
 
     /**
      * Gathers resource information
      */
-    gatherResourceInfo: function () {
+    gatherResourceInfo() {
         const prompts = [{
             type: 'list',
             name: 'apiParentResource',
@@ -92,12 +92,12 @@ module.exports = _yeoman.Base.extend({
         return this.prompt(prompts).then((props) => {
             this.props = Object.assign(this.props || {}, props);
         });
-    },
+    }
 
     /**
      * Creates cloud formation template for the api resource
      */
-    createResourceTemplate: function() {
+    createResourceTemplate() {
         let updated = false;
         const resourcePath = this.props.apiResourcePath;
         const resTokens = (resourcePath === EMPTY_RESOURCE)?'':resourcePath;
@@ -134,4 +134,4 @@ module.exports = _yeoman.Base.extend({
             this.log('No updates necessary');
         }
     }
-});
+}

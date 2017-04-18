@@ -1,36 +1,36 @@
 'use strict';
 
-const _yeoman = require('yeoman-generator');
+const Generator = require('yeoman-generator');
 const _decamelize = require('decamelize');
 
 const _fsUtils = require('../../utils/fs-utils');
 const _prompts = require('../../utils/prompts');
 const _consts = require('../../utils/constants');
 
-module.exports = _yeoman.Base.extend({
+module.exports = class extends Generator {
     /**
      * Initializes the generator.
      */
-    constructor: function() {
-        _yeoman.Base.apply(this, arguments);
+    constructor(args, opts) {
+        super(args, opts);
         this.availableSources = null;
         this.availableLambdas = null;
-    },
+    }
 
     /**
      * Shows a the title of the sub generator, and a brief description.
      */
-    showTitle: function() {
+    showTitle() {
         this.log(_consts.SEPARATOR);
         this.log('Trigger an event from a DynamoDB stream:');
         this.log();
-    },
+    }
 
     /**
      * Queries the project to identify all defined dynamodb tables that can
      * serve as event sources.
      */
-    lookupAvailableSources: function() {
+    lookupAvailableSources() {
         const done = this.async();
         const path = this.destinationPath('resources/dev/dynamodb');
         _fsUtils.getFilesInDir(path, (parent, fileName, stats) => {
@@ -42,13 +42,13 @@ module.exports = _yeoman.Base.extend({
         }).finally(() => {
             done();
         });
-    },
+    }
 
     /**
      * Queries the project to identify all defined lambda functions that can
      * serve as event handlers.
      */
-    lookupAvailableLambdas: function() {
+    lookupAvailableLambdas() {
         const lambdaConfig = this.fs.readJSON(
             this.destinationPath('src/lambda-config.json'), {
                 lambdas: []
@@ -57,25 +57,25 @@ module.exports = _yeoman.Base.extend({
         this.availableLambdas = lambdaConfig.lambdas.map((lambda) => {
             return lambda.functionName;
         });
-    },
+    }
 
     /**
      * Ensures that there are existing lambdas and sources for the generation of
      * the trigger.
      */
-    validateSourceAndLambdas: function() {
+    validateSourceAndLambdas() {
         if(!this.availableSources || this.availableSources.length <= 0) {
             this.env.error('This project does not define any sources that can trigger events');
         }
         if(!this.availableLambdas || this.availableLambdas.length <= 0) {
             this.env.error('This project does not define any lambdas that can handle events');
         }
-    },
+    }
 
     /**
      * Gathers trigger information
      */
-    gatherTriggerInfo: function () {
+    gatherTriggerInfo () {
         const prompts = [{
             type: 'list',
             name: 'triggerTableSource',
@@ -124,22 +124,22 @@ module.exports = _yeoman.Base.extend({
                     this.props = Object.assign(this.props || {}, props);
                 });
             });
-    },
+    }
 
     /**
      * Generates target file names.
      */
-    generateTargetFileNames: function() {
+    generateTargetFileNames() {
         const templateFile = _decamelize(this.props.triggerName)
                                 .replace(/_/g, '-');
 
         this.props.triggerTemplateFile = `${templateFile}-trigger`;
-    },
+    }
 
     /**
      * Creates cloud formation template for the trigger
      */
-    createTriggerTemplate: function() {
+    createTriggerTemplate() {
         this.props.projectTargetEnvironments.forEach((envStr) => {
             const props = Object.assign({}, this.props, {
                 envStr: envStr
@@ -151,4 +151,4 @@ module.exports = _yeoman.Base.extend({
             );
         });
     }
-});
+}

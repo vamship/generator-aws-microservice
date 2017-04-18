@@ -1,32 +1,32 @@
 'use strict';
 
-const _yeoman = require('yeoman-generator');
+const Generator = require('yeoman-generator');
 const _decamelize = require('decamelize');
 
 const _consts = require('../../utils/constants');
 
-module.exports = _yeoman.Base.extend({
+module.exports = class extends Generator {
     /**
      * Initializes the generator.
      */
-    constructor: function() {
-        _yeoman.Base.apply(this, arguments);
-    },
+    constructor(args, opts) {
+        super(args, opts);
+    }
 
     /**
      * Shows a the title of the sub generator, and a brief description.
      */
-    showTitle: function() {
+    showTitle() {
         const title = this.options.apiModelTitle || 'Create a model for a REST request/response';
         this.log(_consts.SEPARATOR);
         this.log(title);
         this.log();
-    },
+    }
 
     /**
      * Gathers model information
      */
-    gatherModelInfo: function () {
+    gatherModelInfo() {
         this.props = this.props || {};
         this.props.apiModelName = this.options.apiModelName;
         this.props.apiModelDescription = this.options.apiModelDescription;
@@ -52,28 +52,28 @@ module.exports = _yeoman.Base.extend({
         return this.prompt(prompts).then((props) => {
             this.props = Object.assign(this.props || {}, props);
         });
-    },
+    }
 
     /**
      * Generates target file names.
      */
-    generateTargetFileNames: function() {
+    generateTargetFileNames() {
         const templateFile = _decamelize(this.props.apiModelName)
                                 .replace(/_/g, '-');
 
         this.props.modelTemplateFile = `${templateFile}-model`;
-    },
+    }
 
     /**
      * Creates cloud formation template for the api model
      */
-    createModelTemplate: function() {
+    createModelTemplate() {
         this.fs.copyTpl(
             this.templatePath(`resources/api/_models/model.js`),
             this.destinationPath(`resources/api/_models/${this.props.modelTemplateFile}.js`),
             this.props
         );
-    },
+    }
 
     /**
      * Finish up and show user messae.
@@ -81,4 +81,4 @@ module.exports = _yeoman.Base.extend({
     finish() {
         this.log('A new model file will be created. You will have to update the model with the appropriate JSON schema');
     }
-});
+}
