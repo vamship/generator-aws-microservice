@@ -145,4 +145,4 @@ module.exports = class extends Generator {
              this.props
          );
      }
-}
+};

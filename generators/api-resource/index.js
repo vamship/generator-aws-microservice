@@ -134,4 +134,4 @@ module.exports = class extends Generator {
             this.log('No updates necessary');
         }
     }
-}
+};

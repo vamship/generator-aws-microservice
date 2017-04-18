@@ -15,7 +15,7 @@ module.exports = class extends Generator {
     constructor(args, opts) {
         super(args, opts);
     }
-    
+
    /**
     * Gather basic project information.
     */
@@ -108,4 +108,4 @@ module.exports = class extends Generator {
         // this.composeWith(`${_consts.GENERATOR_NAME}:${_consts.SUB_GEN_TABLE}`);
         this.composeWith(`${_consts.GENERATOR_NAME}:${_consts.SUB_GEN_FINISH}`);
     }
-}
+};

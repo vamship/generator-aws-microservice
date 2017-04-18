@@ -81,4 +81,4 @@ module.exports = class extends Generator {
     finish() {
         this.log('A new model file will be created. You will have to update the model with the appropriate JSON schema');
     }
-}
+};

@@ -12,7 +12,7 @@ module.exports = class extends Generator {
     constructor(args, opts) {
         super(args, opts);
     }
-    
+
     /**
      * Display completed message with future actions.
      */
@@ -56,4 +56,4 @@ module.exports = class extends Generator {
             this.log(line);
         });
     }
-}
+};

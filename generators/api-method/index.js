@@ -264,4 +264,4 @@ module.exports = class extends Generator {
     finish() {
         this.log('A new API method will be created. You will have to update the request and response mappings within the template');
     }
-}
+};
