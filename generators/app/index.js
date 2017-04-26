@@ -90,20 +90,16 @@ module.exports = class extends Generator {
     compose() {
         this.composeWith(`${_consts.GENERATOR_NAME}:${_consts.SUB_GEN_LAMBDA}`);
         this.composeWith(`${_consts.GENERATOR_NAME}:${_consts.SUB_GEN_ROLE}`, {
-            options: {
-                title: 'Create a new role for lambda functions',
-                projectPrefix: this.props.projectPrefix,
-                roleName: 'lambda_role',
-                roleAssumedBy: 'LAMBDA'
-            }
+            title: 'Create a new role for lambda functions',
+            projectPrefix: this.props.projectPrefix,
+            roleName: 'lambda_role',
+            roleAssumedBy: 'LAMBDA'
         });
         this.composeWith(`${_consts.GENERATOR_NAME}:${_consts.SUB_GEN_ROLE}`, {
-            options: {
-                title: 'Create a new role for the API gateway',
-                projectPrefix: this.props.projectPrefix,
-                roleName: 'api_gateway_role',
-                roleAssumedBy: 'API GATEWAY'
-            }
+            title: 'Create a new role for the API gateway',
+            projectPrefix: this.props.projectPrefix,
+            roleName: 'api_gateway_role',
+            roleAssumedBy: 'API GATEWAY'
         });
         // this.composeWith(`${_consts.GENERATOR_NAME}:${_consts.SUB_GEN_TABLE}`);
         this.composeWith(`${_consts.GENERATOR_NAME}:${_consts.SUB_GEN_FINISH}`);

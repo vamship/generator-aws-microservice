@@ -227,20 +227,16 @@ module.exports = class extends Generator {
     compose() {
         if(this.props.apiMethodRequestModelName !== '') {
             this.composeWith(`${_consts.GENERATOR_NAME}:${_consts.SUB_GEN_API_MODEL}`, {
-                options: {
-                    apiModelTitle: 'Creating a REQUEST MODEL for the method\n',
-                    apiModelName: this.props.apiMethodRequestModelName,
-                    apiModelDescription: `Request model for ${this.props.apiMethodVerb} ${this.props.apiMethodResource}`
-                }
+                apiModelTitle: 'Creating a REQUEST MODEL for the method\n',
+                apiModelName: this.props.apiMethodRequestModelName,
+                apiModelDescription: `Request model for ${this.props.apiMethodVerb} ${this.props.apiMethodResource}`
             });
         }
         if(this.props.apiMethodResponseModelName !== '') {
             this.composeWith(`${_consts.GENERATOR_NAME}:${_consts.SUB_GEN_API_MODEL}`, {
-                options: {
-                    apiModelTitle: 'Creating a RESPONSE MODEL for the method\n',
-                    apiModelName: this.props.apiMethodResponseModelName,
-                    apiModelDescription: `Response model for ${this.props.apiMethodVerb} ${this.props.apiMethodResource}`
-                }
+                apiModelTitle: 'Creating a RESPONSE MODEL for the method\n',
+                apiModelName: this.props.apiMethodResponseModelName,
+                apiModelDescription: `Response model for ${this.props.apiMethodVerb} ${this.props.apiMethodResource}`
             });
         }
     }
