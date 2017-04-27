@@ -39,13 +39,13 @@
     "wysknd-aws-cf-generator": "^2.6.0",
     "wysknd-lib": "0.0.2",
     "wysknd-log": "0.0.4",
-    "wysknd-test": "^3.9.0"
+    "wysknd-test": "^3.9.3"
   },
   "dependencies": {
     "ajv": "^4.2.0",
     "aws-sdk": "^2.5.0",
     "wysknd-args": "^0.0.1",
-    "wysknd-aws-lambda": "^0.2.0"
+    "wysknd-aws-lambda": "^2.1.0"
   },
   "repository": {
     "type": "git",
