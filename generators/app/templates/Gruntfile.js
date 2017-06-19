@@ -7,8 +7,9 @@ const _awsSdk = require('aws-sdk');
 const DEPLOY_STACKS = ['dev', 'qa', 'prod', 'core', 'api'];
 
 // Need to set project specific options here.
-const AWS_PROFILE = '<%= awsProfile %>';
-const AWS_REGION = '<%= awsRegion %>';
+const DEFAULT_AWS_PROFILE = '<%= awsProfile %>';
+const DEFAULT_AWS_REGION = '<%= awsRegion %>';
+const DEFAULT_AWS_S3_BUCKET = `${ENV.appName}`;
 
 // -------------------------------------------------------------------------------
 //  Help documentation
@@ -105,6 +106,15 @@ const HELP_TEXT =
 '                       all components when runing a watch.                      \n' +
 '   --lambda-function : A regular expression that can be used to filter out      \n' +
 '                       lambda functions when performing a deployment.           \n' +
+'   --aws-profile     : The AWS profile against which the grunt task will        \n' +
+'                       operate. If omitted, a default value (hard coded in the  \n' +
+'                       Gruntfile) will be used.                                 \n' +
+'   --aws-region      : The AWS region against which the grunt task will         \n' +
+'                       operate. If omitted, a default value (hard coded in the  \n' +
+'                       Gruntfile) will be used.                                 \n' +
+'   --aws-s3-bucket   : The S3 bucket to use for storage of temporary files.     \n' +
+'                       If omitted, a default value (hard coded in the Gruntfile)\n' +
+'                       will be used.                                            \n' +
 '                                                                                \n' +
 ' IMPORTANT: Please note that while the grunt file exposes tasks in addition to  \n' +
 ' ---------  the ones listed below (no private tasks in grunt yet :( ), it is    \n' +
@@ -178,13 +188,21 @@ module.exports = function(grunt) {
     const RESOURCES = ENV.ROOT.resources;
 
     // Cloud formation options
-    const AWS_S3_BUCKET = `${ENV.appName}`;
     const AWS_S3_CF_TEMPLATE_DIR = 'cf-templates';
     const _getStackName = (stackEnv) => {
         return `${ENV.appName}-${stackEnv}-stack`;
     };
     const _getTemplateName = (stackEnv) => {
         return `${ENV.appName}-${stackEnv}-template.json`;
+    };
+    const _getAwsRegion = () => {
+        return grunt.option('aws-region') || DEFAULT_AWS_REGION;
+    };
+    const _getAwsProfile = () => {
+        return grunt.option('aws-profile') || DEFAULT_AWS_PROFILE;
+    };
+    const _getAwsS3Bucket = () => {
+        return grunt.option('aws-s3-bucket') || DEFAULT_AWS_S3_BUCKET;
     };
 
     /* ------------------------------------------------------------------------
@@ -396,9 +414,9 @@ module.exports = function(grunt) {
          */
         aws_s3: {
             options: {
-                awsProfile: AWS_PROFILE,
-                bucket: AWS_S3_BUCKET,
-                region: AWS_REGION
+                awsProfile: _getAwsProfile(),
+                bucket: _getAwsS3Bucket(),
+                region: _getAwsRegion()
             },
             uploadCf: {
                 action: 'upload',
@@ -416,8 +434,8 @@ module.exports = function(grunt) {
          */
         cloudformation: {
             options: {
-                region: AWS_REGION,
-                profile: AWS_PROFILE,
+                region: _getAwsRegion(),
+                profile: _getAwsProfile(),
                 capabilities: ['CAPABILITY_NAMED_IAM']
             },
             status: {
@@ -494,7 +512,7 @@ module.exports = function(grunt) {
                     grunt.task.run('aws_s3:uploadCf');
 
                     grunt.config.set(`cloudformation.${action}.templateUrl`,
-                        `https://s3.amazonaws.com/${AWS_S3_BUCKET}/${AWS_S3_CF_TEMPLATE_DIR}/${templateName}`);
+                        `https://s3.amazonaws.com/${_getAwsS3Bucket()}/${AWS_S3_CF_TEMPLATE_DIR}/${templateName}`);
                 }
             }
 
@@ -568,20 +586,20 @@ module.exports = function(grunt) {
 
             const iam = new _awsSdk.IAM({
                 credentials: new _awsSdk.SharedIniFileCredentials({
-                    profile: AWS_PROFILE
+                    profile: _getAwsProfile()
                 })
             });
 
             const done = this.async();
             iam.getUser((err, data) => {
                 if (err) {
-                    grunt.log.error(`Unable to extract AWS information for profile: [${AWS_PROFILE}]`);
+                    grunt.log.error(`Unable to extract AWS information for profile: [${_getAwsProfile()}]`);
                     done(false);
                     return;
                 }
                 grunt.log.writeln(`Deploying lambda functions to: [${target}]`);
                 const accountId = data.User.Arn.split(':')[4];
-                const arnPrefix = `arn:aws:lambda:${AWS_REGION}:${accountId}:function:`;
+                const arnPrefix = `arn:aws:lambda:${_getAwsRegion()}:${accountId}:function:`;
                 _lambdaConfig.lambdas.forEach((config) => {
                     if (!functionNameFilter.test(config.functionName)) {
                         grunt.log.debug(`Skipping function: [${config.functionName}]`);
@@ -594,8 +612,8 @@ module.exports = function(grunt) {
                     // asynchronous
                     grunt.config.set(`lambda_deploy.${taskName}.options.aliases`, target);
                     grunt.config.set(`lambda_deploy.${taskName}.options.enableVersioning`, true);
-                    grunt.config.set(`lambda_deploy.${taskName}.options.region`, AWS_REGION);
-                    grunt.config.set(`lambda_deploy.${taskName}.options.profile`, AWS_PROFILE);
+                    grunt.config.set(`lambda_deploy.${taskName}.options.region`, _getAwsRegion());
+                    grunt.config.set(`lambda_deploy.${taskName}.options.profile`, _getAwsProfile());
                     grunt.config.set(`lambda_deploy.${taskName}.arn`, arn);
                     grunt.config.set(`lambda_deploy.${taskName}.package`, packageName);
                     grunt.task.run(`lambda_deploy:${taskName}`);
