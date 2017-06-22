@@ -4,7 +4,7 @@ const ApiGatewayTemplates = require('wysknd-aws-cf-generator').ApiGatewayTemplat
 const AuthorizerTemplate = ApiGatewayTemplates.AuthorizerTemplate;
 
 module.exports = (dirInfo) => {
-    const authorizerName = '<%= projectPrefix %>-<%= apiAuthorizerName %>';
+    const authorizerName = '<%= apiAuthorizerName %>';
     const authorizerKey = dirInfo.getNamespacedToken('api_authorizer', authorizerName);
 
     return (new AuthorizerTemplate(authorizerKey, authorizerName))

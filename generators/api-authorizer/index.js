@@ -48,11 +48,7 @@ module.exports = class extends Generator {
             type: 'input',
             name: 'apiAuthorizerName',
             message: 'Authorizer name?',
-            default: 'default_authorizer',
-            filter: (response) => {
-                const suffix = response.endsWith('_authorizer')?'':'_authorizer';
-                return `${response}${suffix}`;
-            },
+            default: 'default',
             validate: (response) => {
                 const pattern = /^[a-zA-Z0-9_]+$/;
                 if(response.match(pattern)) {
@@ -104,7 +100,7 @@ module.exports = class extends Generator {
     createAuthorizerTemplate() {
         this.fs.copyTpl(
             this.templatePath(`resources/api/authorizer.js`),
-            this.destinationPath(`resources/api/${this.props.apiAuthorizerFile}.js`),
+            this.destinationPath(`resources/api/${this.props.apiAuthorizerFile}-authorizer.js`),
             this.props
         );
     }
