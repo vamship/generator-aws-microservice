@@ -214,9 +214,13 @@ module.exports = class extends Generator {
             this.props = Object.assign(this.props || {}, props);
             if(this.props.apiMethodRequestModel === 'NONE') {
                 this.props.apiMethodRequestModelName = '';
+            } else {
+                this.props.apiMethodRequestModelName = this.props.apiMethodRequestModel;
             }
             if(this.props.apiMethodResponseModel === 'NONE') {
                 this.props.apiMethodResponseModelName = '';
+            } else {
+                this.props.apiMethodRequestModelName = this.props.apiMethodResponseModel;
             }
         });
     }
