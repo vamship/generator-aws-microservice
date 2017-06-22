@@ -16,6 +16,8 @@ module.exports = class extends Generator {
         this.availableAuthorizers = ['NONE'];
         this.availableLambdas = null;
         this.availableModels = ['NONE', 'CREATE NEW'];
+        this.createRequestModel = false;
+        this.createResponseModel = false;
     }
 
     /**
@@ -214,11 +216,15 @@ module.exports = class extends Generator {
             this.props = Object.assign(this.props || {}, props);
             if(this.props.apiMethodRequestModel === 'NONE') {
                 this.props.apiMethodRequestModelName = '';
+            } else if (this.props.apiMethodRequestModel === 'CREATE NEW') {
+                this.createRequestModel = true;
             } else {
                 this.props.apiMethodRequestModelName = this.props.apiMethodRequestModel;
             }
             if(this.props.apiMethodResponseModel === 'NONE') {
                 this.props.apiMethodResponseModelName = '';
+            } else if (this.props.apiMethodResponseModel === 'CREATE NEW') {
+                this.createResponseModel = true;
             } else {
                 this.props.apiMethodRequestModelName = this.props.apiMethodResponseModel;
             }
@@ -229,14 +235,14 @@ module.exports = class extends Generator {
      * Generate request/response models by composing sub generators.
      */
     compose() {
-        if(this.props.apiMethodRequestModelName !== '') {
+        if(this.createRequestModel) {
             this.composeWith(`${_consts.GENERATOR_NAME}:${_consts.SUB_GEN_API_MODEL}`, {
                 apiModelTitle: 'Creating a REQUEST MODEL for the method\n',
                 apiModelName: this.props.apiMethodRequestModelName,
                 apiModelDescription: `Request model for ${this.props.apiMethodVerb} ${this.props.apiMethodResource}`
             });
         }
-        if(this.props.apiMethodResponseModelName !== '') {
+        if(this.createResponseModel) {
             this.composeWith(`${_consts.GENERATOR_NAME}:${_consts.SUB_GEN_API_MODEL}`, {
                 apiModelTitle: 'Creating a RESPONSE MODEL for the method\n',
                 apiModelName: this.props.apiMethodResponseModelName,
