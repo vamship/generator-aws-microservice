@@ -63,7 +63,7 @@ module.exports = class extends Generator {
             default: EMPTY_RESOURCE,
             filter: resp => resp === EMPTY_RESOURCE? '':resp,
             validate: (response) => {
-                const resPattern = /(^[^\/]|^:)((\/:?)?[a-zA-Z0-9]+)+$/;
+                const resPattern = /(^[^\/]|^:)((\/:?)?[a-zA-Z0-9-_)]+)+$/;
                 if(response === '' || response.match(resPattern)) {
                     return true;
                 }
