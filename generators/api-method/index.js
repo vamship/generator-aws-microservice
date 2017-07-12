@@ -226,7 +226,7 @@ module.exports = class extends Generator {
             } else if (this.props.apiMethodResponseModel === 'CREATE NEW') {
                 this.createResponseModel = true;
             } else {
-                this.props.apiMethodRequestModelName = this.props.apiMethodResponseModel;
+                this.props.apiMethodResponseModelName = this.props.apiMethodResponseModel;
             }
         });
     }
