@@ -13,7 +13,7 @@ module.exports = class extends Generator {
     constructor(args, opts) {
         super(args, opts);
         this.availableResources = ['/'];
-        this.availableAuthorizers = ['NONE'];
+        this.availableAuthorizers = ['NONE', 'IAM'];
         this.availableLambdas = null;
         this.availableModels = ['NONE', 'CREATE NEW'];
         this.createRequestModel = false;
@@ -146,7 +146,7 @@ module.exports = class extends Generator {
             message: 'Authorizer type?',
             choices: [ 'COGNITO_USER_POOLS', 'CUSTOM' ],
             default: 0,
-            when: answers => answers.apiMethodAuthorizer !== 'NONE'
+            when: answers => ['NONE', 'IAM'].indexOf(answers.apiMethodAuthorizer) < 0
         }, {
             type: 'confirm',
             name: 'apiMethodEnableCors',

@@ -15,7 +15,7 @@ module.exports = (dirInfo) => {
     const responseModel = '<%= apiMethodResponseModelName %>';
     const responseModelKey = dirInfo.getNamespacedToken('api_model', responseModel);
 <% } -%>
-<% if(apiMethodAuthorizer !== 'NONE') { -%>
+<% if(['NONE', 'IAM'].indexOf(apiMethodAuthorizer) < 0) { -%>
 
     const authorizerId = dirInfo.getNamespacedToken('api_authorizer', '<%= apiMethodAuthorizer %>');
     const authorizerType = '<%= apiMethodAuthorizerType %>';
@@ -25,7 +25,7 @@ module.exports = (dirInfo) => {
     //TODO: This request template must be filled out with an appropriate mapping
     //of the HTTP request to the parameters required by the back end.
     const requestTemplate = `{
-<% if(apiMethodAuthorizer !== 'NONE') { -%>
+<% if(['NONE', 'IAM'].indexOf(apiMethodAuthorizer) < 0) { -%>
 ${_mappingHelper.mapUserFromJwt({
         username: 'email',
         accountId: 'custom:accountId',
@@ -50,6 +50,8 @@ ${_mappingHelper.mapUserFromJwt({
         .setHttpMethod(method)
 <% if(apiMethodAuthorizer === 'NONE') { -%>
         .setAuthorizer(false)
+<% } else if (apiMethodAuthorizer === 'IAM') { -%>
+        .useIAMAuthorizer(false)
 <% } else { -%>
         .setAuthorizer(`<%% ${authorizerId} %%>`, authorizerType)
 <% } -%>
@@ -98,7 +100,7 @@ ${_mappingHelper.mapUserFromJwt({
 <% } else { -%>
         .setResponseModel('Empty', 'application/json', '200')
 <% } -%>
-<% if(apiMethodAuthorizer !== 'NONE') { -%>
+<% if(['NONE', 'IAM'].indexOf(apiMethodAuthorizer) < 0) { -%>
         .addDependency(authorizerId)
 <% } -%>
 <% if(apiMethodResponseModelName.length > 0) { -%>
