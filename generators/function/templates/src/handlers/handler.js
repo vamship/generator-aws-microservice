@@ -5,6 +5,8 @@ const _schemaHelper = require('wysknd-args').schemaHelper;
 const _schema = require('../schema/<%= lambdaSchemaFile %>');
 const _checkSchema = _schemaHelper.buildSchemaChecker(_schema);
 <%} %>
+const Environment = require('wysknd-aws-lambda').Environment;
+
 /**
  * <%= lambdaDescription %>
  *
@@ -18,15 +20,27 @@ const _checkSchema = _schemaHelper.buildSchemaChecker(_schema);
 module.exports = function(event, context, callback, ext) {
     const logger = ext.logger;
     const config = ext.config;
-<%if (lambdaHasSchema) {%>
-    let error = _checkSchema(event, callback);
 
-    if (error) {
+    function _finishWithError(error) {
+        if (typeof error === 'string') {
+            error = new Error(error);
+        }
         logger.error(error);
         callback(error);
-        return;
+    }
+
+<%if (lambdaHasSchema) {%>
+    let error = _checkSchema(event, callback);
+    if (error) {
+        return _finishWithError(error);
     }
 <%} %>
+
+    const env = new Environment(ext.env);
+    if (!env.isValid) {
+        return _finishWithError(`[Error] Invalid execution environment: [${ext.env}]`);
+    }
+
     //TODO: Implement function and invoke callback.
     callback(null, 'Lambda function [<%= lambdaFunctionName %>] executed successfully');
 };
