@@ -18,6 +18,7 @@ module.exports = (dirInfo) => {
         const functionKey = dirInfo.getNamespacedToken('lambda_function', functionName);
 
         const functionTemplate = new FunctionTemplate(functionKey, functionName, lambda.handlerName)
+            .setRuntime('nodejs6.10')
             .setRole(`$REGION_${roleName}`)
             .addDependency(roleKey);
 
