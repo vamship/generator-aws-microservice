@@ -1,7 +1,5 @@
-/* jshint node:true, expr:true */
 'use strict';
 
-const _sinon = require('sinon');
 const _chai = require('chai');
 _chai.use(require('sinon-chai'));
 _chai.use(require('chai-as-promised'));
@@ -11,6 +9,7 @@ const _loggerProvider = require('wysknd-log').loggerProvider;
 _loggerProvider.enableMock();
 
 const _rewire = require('rewire');
+const _shortId = require('shortid');
 const _testHelper = require('wysknd-test');
 const LambdaWrapper = _testHelper.aws.LambdaWrapper;
 const _testValueProvider = _testHelper.testValueProvider;
@@ -23,21 +22,29 @@ describe('[<%= lambdaHandlerName %>]', () => {
     const DEFAULT_FIRST_NAME = 'John';
     const DEFAULT_LAST_NAME = 'Doe';
 <%} -%>
-    function _createWrapper(event, alias, config) {
-        event = event || {};
-
+    function _getWrapperBuilder(defaultOptions) {
+        defaultOptions = Object.assign({
 <%if (lambdaHasSchema) {-%>
-        event.user = event.user || {};
-        event.user.firstName = event.user.firstName || DEFAULT_FIRST_NAME;
-        event.user.lastName = event.user.lastName || DEFAULT_LAST_NAME;
+            input: {
+                user: {
+                    firstName: _shortId.generate(),
+                    lastName: _shortId.generate()
+                }
+            },
 <%} -%>
-        const contextInfo = {
-            alias
+            env: 'dev',
+            config: {}
+        }, defaultOptions);
+
+        return (options) => {
+            options = Object.assign({}, defaultOptions, options);
+            const event = Object.assign({}, defaultOptions.input, options.input);
+            const contextInfo = Object.assign({
+                alias: options.env || defaultOptions.env
+            });
+            const config = Object.assign({}, defaultOptions.config, options.config);
+            return new LambdaWrapper(_handler, event, contextInfo, config);
         };
-
-        config = config || {};
-
-        return new LambdaWrapper(_handler, event, contextInfo, config);
     }
 
     beforeEach(() => {
@@ -100,7 +107,10 @@ describe('[<%= lambdaHandlerName %>]', () => {
 <%} -%>
     describe('[execution]', () => {
         it('should invoke the callback with a success message', () => {
-            const wrapper = _createWrapper(undefined, 'dev');
+            const createWrapper = _getWrapperBuilder();
+            const wrapper = createWrapper({
+                env: 'dev'
+            });
             const expectedMessage = 'Lambda function [<%= lambdaFunctionName %>] executed successfully';
 
             expect(wrapper.callback).to.not.have.been.called;

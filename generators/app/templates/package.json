@@ -44,6 +44,7 @@
   "dependencies": {
     "ajv": "^4.2.0",
     "aws-sdk": "^2.5.0",
+    "shortid": "^2.2.8",
     "wysknd-args": "^0.0.1",
     "wysknd-aws-lambda": "^2.1.0"
   },
